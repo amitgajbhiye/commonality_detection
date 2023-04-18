@@ -10,7 +10,7 @@
 #SBATCH -A scw1858
 
 #SBATCH -p compute
-#SBATCH --mem=8G
+#SBATCH --mem=12G
 
 #SBATCH -t 0-00:15:00
 
