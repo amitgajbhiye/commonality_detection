@@ -154,14 +154,14 @@ gvs_concept, con_in_vocab, con_not_in_vocab = gv.get_glove_vectors(concept_list)
 gvs_property, prop_in_vocab, prop_not_in_vocab = gv.get_glove_vectors(property_list)
 
 
-print(f"gvs_concept.shape : {gvs_concept.shape}")
-print(f"gvs_property.shape : {gvs_property.shape}")
+print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
+print(f"gvs_property.shape : {gvs_property.shape}", flush=True)
 
-print(f"con_in_vocab : {con_in_vocab}")
-print(f"prop_in_vocab : {prop_in_vocab}")
+print(f"con_in_vocab : {con_in_vocab}", flush=True)
+print(f"prop_in_vocab : {prop_in_vocab}", flush=True)
 
-print(f"con_not_in_vocab : {con_not_in_vocab}")
-print(f"prop_not_in_vocab : {prop_not_in_vocab}")
+print(f"con_not_in_vocab : {con_not_in_vocab}", flush=True)
+print(f"prop_not_in_vocab : {prop_not_in_vocab}", flush=True)
 
 
 con_similar_prop_file = get_nearest_neighbours(
@@ -177,4 +177,4 @@ relbert = RelBertEmbeddings()
 con_prop_list = relbert.read_data(con_similar_prop_file)
 relbert_embeds = relbert.get_relbert_embeds(con_prop_list)
 
-print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}")
+print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
