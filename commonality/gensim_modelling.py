@@ -2,6 +2,7 @@ import torch
 import os
 import numpy as np
 import logging
+import pickle
 
 
 from gensim.models import KeyedVectors
@@ -161,11 +162,11 @@ gvs_property, prop_in_vocab, prop_not_in_vocab = gv.get_glove_vectors(property_l
 print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
 print(f"gvs_property.shape : {gvs_property.shape}", flush=True)
 
-print(f"con_in_vocab : {con_in_vocab}", flush=True)
-print(f"prop_in_vocab : {prop_in_vocab}", flush=True)
+print(f"con_in_vocab : {len(con_in_vocab)}, {con_in_vocab}", flush=True)
+print(f"prop_in_vocab : {len(prop_in_vocab)}, {prop_in_vocab}", flush=True)
 
-print(f"con_not_in_vocab : {con_not_in_vocab}", flush=True)
-print(f"prop_not_in_vocab : {prop_not_in_vocab}", flush=True)
+print(f"con_not_in_vocab : {len(con_not_in_vocab)}, {con_not_in_vocab}", flush=True)
+print(f"prop_not_in_vocab : {len(prop_not_in_vocab)}, {prop_not_in_vocab}", flush=True)
 
 
 con_similar_prop_file = get_nearest_neighbours(
@@ -182,3 +183,13 @@ con_prop_list = relbert.read_data(con_similar_prop_file)
 relbert_embeds = relbert.get_relbert_embeds(con_prop_list)
 
 print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
+
+con_prop_rel_embeds = []
+
+for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
+    con_prop = "#".join(con_prop)
+    con_prop_rel_embeds.append([con_prop, rel_embed])
+
+
+with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
+    pickle.dump(con_prop_rel_embeds, emb_pkl)
