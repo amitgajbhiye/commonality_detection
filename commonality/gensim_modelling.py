@@ -137,7 +137,11 @@ class RelBertEmbeddings:
 #########################
 # Hawk Paths
 
-wv_format_glove_file = "/scratch/c.scmag3/glove/glove.840B.300d.word2vec.format.txt"
+# wv_format_glove_file = "/scratch/c.scmag3/glove/glove.840B.300d.word2vec.format.txt"
+
+# 42B
+wv_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
+
 concept_file = "/scratch/c.scmag3/property_augmentation/data/ufet/clean_types.txt"
 property_file = (
     "/scratch/c.scmag3/property_augmentation/data/prop_vocab/prop_vocab_cnetp_clean.txt"
