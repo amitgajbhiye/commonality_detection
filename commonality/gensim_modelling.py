@@ -189,11 +189,15 @@ relbert_embeds = relbert.get_relbert_embeds(con_prop_list, batch_size=32)
 
 print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
 
+#################
+con_prop_list = con_prop_list[0:2000]
+################
+
 con_prop_rel_embeds = []
 
 for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
     con_prop = "#".join(con_prop)
-    con_prop_rel_embeds.append([con_prop, rel_embed.cpu().numpy()])
+    con_prop_rel_embeds.append([con_prop, rel_embed])
 
 
 with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
@@ -207,7 +211,11 @@ def hdbscan_clusters(embeds):
     return (clusterer.labels_, clusterer.probabilities_)
 
 
+print("Starting Clustering ...", flush=True)
+
 labels, probs = hdbscan_clusters(relbert_embeds)
+
+print("Finished Clustering ...", flush=True)
 
 # data_clustered = copy.deepcopy(con_prop_list)
 # _ = [d.insert(2, l) for d, l in zip(data_clustered, labels)]
