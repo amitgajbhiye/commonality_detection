@@ -37,20 +37,128 @@ class GloveVectorsGensim:
 
         return vocab
 
-    def get_glove_vectors(self, data):
-        # vocab = self.get_vocab()
+    # def get_glove_vectors(self, data):
+    #     # vocab = self.get_vocab()
+
+    #     vocab = self.glove_model.key_to_index.keys()
+    #     word_vectors, words_in_vocab, words_not_in_vocab = [], [], []
+
+    #     for word in data:
+    #         if word in vocab:
+    #             word_vectors.append(self.glove_model[word])
+    #             words_in_vocab.append(word)
+    #         else:
+    #             words_not_in_vocab.append(word)
+
+    #     return (np.array(word_vectors, dtype=float), words_in_vocab, words_not_in_vocab)
+
+    def get_glove_vectors(self, word_list):
+        c_word_vocab = 0
+        c_undescore_word_vocab = 0
+        c_hyphen_word_vocab = 0
+        c_multi_word = 0
+        c_multi_word_2 = 0
+
+        word_vocab = []
+        undescore_word_vocab = []
+        hyphen_word_vocab = []
+        multi_word = []
 
         vocab = self.glove_model.key_to_index.keys()
-        word_vectors, words_in_vocab, words_not_in_vocab = [], [], []
 
-        for word in data:
+        for word in word_list:
             if word in vocab:
-                word_vectors.append(self.glove_model[word])
-                words_in_vocab.append(word)
-            else:
-                words_not_in_vocab.append(word)
+                word_vocab.append(word)
+                c_word_vocab += 1
 
-        return (np.array(word_vectors, dtype=float), words_in_vocab, words_not_in_vocab)
+            else:
+                underscore_word = "_".join(word.split())
+                if underscore_word in vocab:
+                    undescore_word_vocab.append(underscore_word)
+                    c_undescore_word_vocab += 1
+
+                else:
+                    hyphen_word = "-".join(word.split())
+
+                    if hyphen_word in vocab:
+                        hyphen_word_vocab.append(hyphen_word)
+                        c_hyphen_word_vocab += 1
+
+                    else:
+                        # print(f"Word Not Found in Vocab : {word}", flush=True)
+                        multi_word.append(word)
+                        c_multi_word += 1
+
+        v_word_vocab = self.glove_model[word_vocab]
+        v_undescore_word_vocab = self.glove_model[undescore_word_vocab]
+        v_hyphen_word_vocab = self.glove_model[hyphen_word_vocab]
+
+        print(flush=True)
+        print(c_word_vocab, flush=True)
+        print(c_undescore_word_vocab, flush=True)
+        print(c_hyphen_word_vocab, flush=True)
+        print(c_multi_word, flush=True)
+        print()
+        print(v_word_vocab.shape, flush=True)
+        print(v_undescore_word_vocab.shape, flush=True)
+        print(v_hyphen_word_vocab.shape, flush=True)
+
+        from nltk.stem import WordNetLemmatizer
+
+        lemmatizer = WordNetLemmatizer()
+
+        v_multi_word = np.empty((0, 300), dtype=float)
+        multi_word_vocab = []
+
+        for mword in multi_word:
+            splitted_word = mword.split()
+
+            try:
+                mw_vector = np.mean(self.glove_model[splitted_word], axis=0)
+                v_multi_word = np.append(
+                    v_multi_word, np.expand_dims(mw_vector, axis=0), axis=0
+                )
+                multi_word_vocab.append(mword)
+
+            except KeyError:
+                try:
+                    lemmas = [lemmatizer.lemmatize(word) for word in splitted_word]
+
+                    lemma_vector = np.mean(self.glove_model[lemmas], axis=0)
+                    v_multi_word = np.append(
+                        v_multi_word, np.expand_dims(lemma_vector, axis=0), axis=0
+                    )
+
+                    multi_word_vocab.append(mword)
+
+                except KeyError:
+                    print(f"Multiword Not Found : {mword}")
+                    continue
+
+            c_multi_word_2 += 1
+
+        print(f"c_multi_word_2 : {c_multi_word_2}")
+        print(f"v_multi_word.shape : {v_multi_word.shape}")
+
+        all_vectors = np.concatenate(
+            (v_word_vocab, v_undescore_word_vocab, v_hyphen_word_vocab, v_multi_word)
+        )
+
+        #     print (type(word_vocab))
+        #     print (type(undescore_word_vocab))
+        #     print (type(hyphen_word))
+        #     print (type(multi_word))
+
+        all_words = (
+            word_vocab + undescore_word_vocab + hyphen_word_vocab + multi_word_vocab
+        )
+
+        print(len(all_words), flush=True)
+        print(all_vectors.shape[0], flush=True)
+
+        assert len(all_words) == all_vectors.shape[0]
+
+        return all_words, all_vectors
 
 
 def match_multi_words(word1, word2):
@@ -153,6 +261,8 @@ property_file = (
     "/scratch/c.scmag3/property_augmentation/data/prop_vocab/prop_vocab_cnetp_clean.txt"
 )
 
+num_nearest_neighbours = 50
+
 #########################
 
 gv = GloveVectorsGensim(wv_format_glove_file=wv_format_glove_file)
@@ -160,8 +270,8 @@ gv = GloveVectorsGensim(wv_format_glove_file=wv_format_glove_file)
 concept_list = gv.read_data(file_path=concept_file)
 property_list = gv.read_data(file_path=property_file)
 
-gvs_concept, con_in_vocab, con_not_in_vocab = gv.get_glove_vectors(concept_list)
-gvs_property, prop_in_vocab, prop_not_in_vocab = gv.get_glove_vectors(property_list)
+con_in_vocab, gvs_concept = gv.get_glove_vectors(concept_list)
+prop_in_vocab, gvs_property = gv.get_glove_vectors(property_list)
 
 
 print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
@@ -170,12 +280,9 @@ print(f"gvs_property.shape : {gvs_property.shape}", flush=True)
 print(f"con_in_vocab : {len(con_in_vocab)}, {con_in_vocab}", flush=True)
 print(f"prop_in_vocab : {len(prop_in_vocab)}, {prop_in_vocab}", flush=True)
 
-print(f"con_not_in_vocab : {len(con_not_in_vocab)}, {con_not_in_vocab}", flush=True)
-print(f"prop_not_in_vocab : {len(prop_not_in_vocab)}, {prop_not_in_vocab}", flush=True)
-
 
 con_similar_prop_file = get_nearest_neighbours(
-    num_nearest_neighbours=10,
+    num_nearest_neighbours=num_nearest_neighbours,
     concept_list=concept_list,
     concept_embeddings=gvs_concept,
     property_list=property_list,
@@ -202,7 +309,7 @@ with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
 
 
 def hdbscan_clusters(embeds):
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=3, gen_min_span_tree=True)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=5, gen_min_span_tree=True)
     clusterer.fit(np.array(embeds))
 
     return (clusterer.labels_, clusterer.probabilities_)
@@ -213,10 +320,6 @@ print("Starting Clustering ...", flush=True)
 labels, probs = hdbscan_clusters(relbert_embeds)
 
 print("Finished Clustering ...", flush=True)
-
-# data_clustered = copy.deepcopy(con_prop_list)
-# _ = [d.insert(2, l) for d, l in zip(data_clustered, labels)]
-# _ = [d.insert(3, p) for d, p in zip(data_clustered, probs)]
 
 
 df = pd.DataFrame(con_prop_list, columns=["concept", "property"])
