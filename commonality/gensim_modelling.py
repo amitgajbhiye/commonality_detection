@@ -122,8 +122,8 @@ class RelBertEmbeddings:
 
         return lines
 
-    def get_relbert_embeds(self, con_prop_list):
-        return self.relbert_model.get_embedding(con_prop_list)
+    def get_relbert_embeds(self, con_prop_list, batch_size):
+        return self.relbert_model.get_embedding(con_prop_list, batch_size=batch_size)
 
 
 #########################
@@ -182,7 +182,7 @@ con_similar_prop_file = get_nearest_neighbours(
 
 relbert = RelBertEmbeddings()
 con_prop_list = relbert.read_data(con_similar_prop_file)
-relbert_embeds = relbert.get_relbert_embeds(con_prop_list)
+relbert_embeds = relbert.get_relbert_embeds(con_prop_list, batch_size=32)
 
 print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
 
