@@ -35,7 +35,9 @@ class GloveVectorsGensim:
         return vocab
 
     def get_glove_vectors(self, data):
-        vocab = self.get_vocab()
+        # vocab = self.get_vocab()
+
+        vocab = self.glove_model.key_to_index.keys()
         word_vectors, words_in_vocab, words_not_in_vocab = [], [], []
 
         for word in data:
@@ -180,16 +182,16 @@ con_similar_prop_file = get_nearest_neighbours(
 
 relbert = RelBertEmbeddings()
 con_prop_list = relbert.read_data(con_similar_prop_file)
-# relbert_embeds = relbert.get_relbert_embeds(con_prop_list)
+relbert_embeds = relbert.get_relbert_embeds(con_prop_list)
 
-# print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
+print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
 
-# con_prop_rel_embeds = []
+con_prop_rel_embeds = []
 
-# for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
-#     con_prop = "#".join(con_prop)
-#     con_prop_rel_embeds.append([con_prop, rel_embed])
+for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
+    con_prop = "#".join(con_prop)
+    con_prop_rel_embeds.append([con_prop, rel_embed])
 
 
-# with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
-#     pickle.dump(con_prop_rel_embeds, emb_pkl)
+with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
+    pickle.dump(con_prop_rel_embeds, emb_pkl)
