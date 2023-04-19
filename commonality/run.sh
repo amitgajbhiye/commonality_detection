@@ -10,11 +10,14 @@
 #SBATCH -A scw1858
 
 #SBATCH -p highmem
+
+##SBATCH --gres=gpu:1
+
 #SBATCH --mem=16G
 #SBATCH --gres=16G
 
-##SBATCH --gres=gpu:1
-##SBATCH -t 0-04:00:00
+
+#SBATCH -t 0-04:00:00
 
 conda activate venv
 
