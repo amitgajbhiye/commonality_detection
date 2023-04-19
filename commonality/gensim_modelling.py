@@ -218,6 +218,8 @@ df = pd.DataFrame(con_prop_list, columns=["concept", "property"])
 df["cluster_label"] = labels
 df["cluster_probs"] = probs
 
+df.sort_values("cluster_label", axis=0, inplace=True)
+
 print(f"Df Shape : {df.shape}")
 print(df.head(n=10))
 
