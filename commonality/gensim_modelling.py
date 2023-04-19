@@ -180,9 +180,9 @@ con_similar_prop_file = get_nearest_neighbours(
 
 relbert = RelBertEmbeddings()
 con_prop_list = relbert.read_data(con_similar_prop_file)
-relbert_embeds = relbert.get_relbert_embeds(con_prop_list)
+# relbert_embeds = relbert.get_relbert_embeds(con_prop_list)
 
-print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
+# print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
 
 # con_prop_rel_embeds = []
 
