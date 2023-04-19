@@ -3,6 +3,9 @@ import os
 import numpy as np
 import logging
 import pickle
+import hdbscan
+import pandas as pd
+import copy
 
 
 from gensim.models import KeyedVectors
@@ -190,8 +193,32 @@ con_prop_rel_embeds = []
 
 for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
     con_prop = "#".join(con_prop)
-    con_prop_rel_embeds.append([con_prop, rel_embed])
+    con_prop_rel_embeds.append([con_prop, rel_embed.cpu().numpy()])
 
 
 with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
     pickle.dump(con_prop_rel_embeds, emb_pkl)
+
+
+def hdbscan_clusters(embeds):
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=10, gen_min_span_tree=True)
+    clusterer.fit(np.array(embeds))
+
+    return (clusterer.labels_, clusterer.probabilities_)
+
+
+labels, probs = hdbscan_clusters(relbert_embeds)
+
+# data_clustered = copy.deepcopy(con_prop_list)
+# _ = [d.insert(2, l) for d, l in zip(data_clustered, labels)]
+# _ = [d.insert(3, p) for d, p in zip(data_clustered, probs)]
+
+
+df = pd.DataFrame(con_prop_list, columns=["concept", "property"])
+df["cluster_label"] = labels
+df["cluster_probs"] = probs
+
+print(f"Df Shape : {df.shape}")
+print(df.head(n=10))
+
+df.to_csv("clustered_con_prop.txt", sep="\t", header=True, index=True)
