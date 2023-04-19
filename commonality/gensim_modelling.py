@@ -29,7 +29,7 @@ class GloveVectorsGensim:
         with open(file_path, "r") as in_file:
             lines = in_file.read().splitlines()
 
-        return lines[0:100]
+        return lines
 
     def get_vocab(self):
         vocab = self.glove_model.key_to_index.keys()
@@ -228,4 +228,4 @@ df.sort_values("cluster_label", axis=0, inplace=True)
 print(f"Df Shape : {df.shape}")
 print(df.head(n=10))
 
-df.to_csv("clustered_con_prop.txt", sep="\t", header=True, index=True)
+df.to_csv("clustered_con_prop.txt", sep="\t", header=True, index=False)
