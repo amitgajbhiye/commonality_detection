@@ -191,5 +191,5 @@ for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
     con_prop_rel_embeds.append([con_prop, rel_embed])
 
 
-# with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
-#     pickle.dump(con_prop_rel_embeds, emb_pkl)
+with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
+    pickle.dump(con_prop_rel_embeds, emb_pkl)
