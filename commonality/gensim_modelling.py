@@ -29,7 +29,7 @@ class GloveVectorsGensim:
         with open(file_path, "r") as in_file:
             lines = in_file.read().splitlines()
 
-        return lines
+        return lines[0:100]
 
     def get_vocab(self):
         vocab = self.glove_model.key_to_index.keys()
@@ -189,9 +189,6 @@ relbert_embeds = relbert.get_relbert_embeds(con_prop_list, batch_size=32)
 
 print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
 
-#################
-con_prop_list = con_prop_list[0:2000]
-################
 
 con_prop_rel_embeds = []
 
@@ -205,7 +202,7 @@ with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
 
 
 def hdbscan_clusters(embeds):
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=10, gen_min_span_tree=True)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=3, gen_min_span_tree=True)
     clusterer.fit(np.array(embeds))
 
     return (clusterer.labels_, clusterer.probabilities_)
