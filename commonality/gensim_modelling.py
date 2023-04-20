@@ -76,7 +76,7 @@ class GloveVectorsGensim:
                         multi_word.append(word)
                         c_multi_word += 1
 
-        print(f"undescore_word_vocab : undescore_word_vocab")
+        print(f"undescore_word_vocab : {undescore_word_vocab}")
         v_word_vocab = self.glove_model[word_vocab]
         v_undescore_word_vocab = self.glove_model[undescore_word_vocab]
         v_hyphen_word_vocab = self.glove_model[hyphen_word_vocab]
