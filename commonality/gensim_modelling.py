@@ -76,25 +76,8 @@ class GloveVectorsGensim:
                         multi_word.append(word)
                         c_multi_word += 1
 
-        print(f"undescore_word_vocab : {undescore_word_vocab}")
-        print(f"hyphen_word_vocab : {hyphen_word_vocab}")
-
-        # v_word_vocab = self.glove_model[word_vocab]
-        # v_undescore_word_vocab = self.glove_model[undescore_word_vocab]
-        # v_hyphen_word_vocab = self.glove_model[hyphen_word_vocab]
-
         words = word_vocab + undescore_word_vocab + hyphen_word_vocab
         gv_words = self.glove_model[words]
-
-        # print(flush=True)
-        # print(c_word_vocab, flush=True)
-        # print(c_undescore_word_vocab, flush=True)
-        # print(c_hyphen_word_vocab, flush=True)
-        # print(c_multi_word, flush=True)
-        # print()
-        # print(v_word_vocab.shape, flush=True)
-        # print(v_undescore_word_vocab.shape, flush=True)
-        # print(v_hyphen_word_vocab.shape, flush=True)
 
         from nltk.stem import WordNetLemmatizer
 
@@ -130,28 +113,11 @@ class GloveVectorsGensim:
 
             c_multi_word_2 += 1
 
-        print(f"c_multi_word_2 : {c_multi_word_2}")
-        print(f"v_multi_word.shape : {v_multi_word.shape}")
-
-        # all_vectors = np.concatenate(
-        #     (v_word_vocab, v_undescore_word_vocab, v_hyphen_word_vocab, v_multi_word)
-        # )
-
+        all_words = words + multi_word_vocab
         all_vectors = np.concatenate((gv_words, v_multi_word))
 
-        #     print (type(word_vocab))
-        #     print (type(undescore_word_vocab))
-        #     print (type(hyphen_word))
-        #     print (type(multi_word))
-
-        # all_words = (
-        #     word_vocab + undescore_word_vocab + hyphen_word_vocab + multi_word_vocab
-        # )
-
-        all_words = words + multi_word_vocab
-
-        print(len(all_words), flush=True)
-        print(all_vectors.shape[0], flush=True)
+        print(f"all_words_count: {len(all_words)}", flush=True)
+        print(f"all_vectors_count: {all_vectors.shape[0]}", flush=True)
 
         assert len(all_words) == all_vectors.shape[0]
 
@@ -186,7 +152,6 @@ def get_nearest_neighbours(
     log.info(f"con_indices shape : {con_indices.shape}")
 
     con_similar_prop_dict = {}
-    # file_name = os.path.join(save_dir, dataset_params["dataset_name"]) + ".tsv"
 
     file_name = f"concept_similar_wiki_words.txt"
 
@@ -197,15 +162,15 @@ def get_nearest_neighbours(
 
             log.info(f"{concept} : {similar_properties}")
 
-            # similar_properties = [
-            #     prop
-            #     for prop in similar_properties
-            #     if not match_multi_words(concept, prop)
-            # ]
+            similar_properties = [
+                prop
+                for prop in similar_properties
+                if not match_multi_words(concept, prop)
+            ]
 
-            # con_similar_prop_dict[concept] = similar_properties
+            con_similar_prop_dict[concept] = similar_properties
 
-            # print(f"{concept}\t{similar_properties}\n")
+            print(f"{concept}\t{similar_properties}\n")
 
             for prop in similar_properties:
                 line = concept + "\t" + prop + "\n"
@@ -231,17 +196,6 @@ class RelBertEmbeddings:
     def get_relbert_embeds(self, con_prop_list, batch_size):
         return self.relbert_model.get_embedding(con_prop_list, batch_size=batch_size)
 
-
-#########################
-# Paths
-
-# Local Paths
-# wv_format_glove_file = "/home/amitgajbhiye/Downloads/embeddings_con_prop/glove.42B.300d.word2vec.format.txt"
-
-# concept_file = (
-#     "/home/amitgajbhiye/cardiff_work/property_augmentation/data/ufet/clean_types.txt"
-# )
-# property_file = "/home/amitgajbhiye/cardiff_work/property_augmentation/data/prop_vocab/prop_vocab_cnetp_clean.txt"
 
 #########################
 # Hawk Paths
@@ -271,7 +225,9 @@ print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
 print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
 
 print(f"con_in_vocab : {len(con_in_vocab)}, {con_in_vocab}", flush=True)
-print(f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}, {gvs_wiki_word}", flush=True)
+print(
+    f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}, {wiki_word_in_vocab}", flush=True
+)
 
 
 con_similar_prop_file = get_nearest_neighbours(
