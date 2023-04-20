@@ -241,8 +241,8 @@ class RelBertEmbeddings:
 # 42B
 w2v_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
 
-concept_file = "/home/amitgajbhiye/cardiff_work/commonality_detection/datasets/ufet_clean_types.txt"
-wiki_word_file = "/home/amitgajbhiye/cardiff_work/commonality_detection/datasets/stopword_filtered_all_wikipedia.txt"
+concept_file = "datasets/stopword_filtered_all_wikipedia.txt"
+wiki_word_file = "datasets/stopword_filtered_all_wikipedia.txt"
 
 num_nearest_neighbours = 50
 
