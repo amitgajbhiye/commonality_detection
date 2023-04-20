@@ -77,19 +77,24 @@ class GloveVectorsGensim:
                         c_multi_word += 1
 
         print(f"undescore_word_vocab : {undescore_word_vocab}")
-        v_word_vocab = self.glove_model[word_vocab]
-        v_undescore_word_vocab = self.glove_model[undescore_word_vocab]
-        v_hyphen_word_vocab = self.glove_model[hyphen_word_vocab]
+        print(f"hyphen_word_vocab : {hyphen_word_vocab}")
 
-        print(flush=True)
-        print(c_word_vocab, flush=True)
-        print(c_undescore_word_vocab, flush=True)
-        print(c_hyphen_word_vocab, flush=True)
-        print(c_multi_word, flush=True)
-        print()
-        print(v_word_vocab.shape, flush=True)
-        print(v_undescore_word_vocab.shape, flush=True)
-        print(v_hyphen_word_vocab.shape, flush=True)
+        # v_word_vocab = self.glove_model[word_vocab]
+        # v_undescore_word_vocab = self.glove_model[undescore_word_vocab]
+        # v_hyphen_word_vocab = self.glove_model[hyphen_word_vocab]
+
+        words = word_vocab + undescore_word_vocab + hyphen_word_vocab
+        gv_words = self.glove_model[words]
+
+        # print(flush=True)
+        # print(c_word_vocab, flush=True)
+        # print(c_undescore_word_vocab, flush=True)
+        # print(c_hyphen_word_vocab, flush=True)
+        # print(c_multi_word, flush=True)
+        # print()
+        # print(v_word_vocab.shape, flush=True)
+        # print(v_undescore_word_vocab.shape, flush=True)
+        # print(v_hyphen_word_vocab.shape, flush=True)
 
         from nltk.stem import WordNetLemmatizer
 
@@ -128,18 +133,22 @@ class GloveVectorsGensim:
         print(f"c_multi_word_2 : {c_multi_word_2}")
         print(f"v_multi_word.shape : {v_multi_word.shape}")
 
-        all_vectors = np.concatenate(
-            (v_word_vocab, v_undescore_word_vocab, v_hyphen_word_vocab, v_multi_word)
-        )
+        # all_vectors = np.concatenate(
+        #     (v_word_vocab, v_undescore_word_vocab, v_hyphen_word_vocab, v_multi_word)
+        # )
+
+        all_vectors = np.concatenate((gv_words, v_multi_word))
 
         #     print (type(word_vocab))
         #     print (type(undescore_word_vocab))
         #     print (type(hyphen_word))
         #     print (type(multi_word))
 
-        all_words = (
-            word_vocab + undescore_word_vocab + hyphen_word_vocab + multi_word_vocab
-        )
+        # all_words = (
+        #     word_vocab + undescore_word_vocab + hyphen_word_vocab + multi_word_vocab
+        # )
+
+        all_words = words + multi_word_vocab
 
         print(len(all_words), flush=True)
         print(all_vectors.shape[0], flush=True)
