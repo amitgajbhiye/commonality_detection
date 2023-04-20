@@ -6,6 +6,7 @@ import pickle
 import hdbscan
 import pandas as pd
 import copy
+import sys
 
 
 from gensim.models import KeyedVectors
@@ -15,6 +16,7 @@ from nltk.stem import WordNetLemmatizer
 
 from relbert import RelBERT
 
+sys.path.insert(0, os.getcwd())
 
 log = logging.getLogger(__name__)
 
@@ -36,21 +38,6 @@ class GloveVectorsGensim:
         log.info(f"Vocab Size : {len(vocab)}")
 
         return vocab
-
-    # def get_glove_vectors(self, data):
-    #     # vocab = self.get_vocab()
-
-    #     vocab = self.glove_model.key_to_index.keys()
-    #     word_vectors, words_in_vocab, words_not_in_vocab = [], [], []
-
-    #     for word in data:
-    #         if word in vocab:
-    #             word_vectors.append(self.glove_model[word])
-    #             words_in_vocab.append(word)
-    #         else:
-    #             words_not_in_vocab.append(word)
-
-    #     return (np.array(word_vectors, dtype=float), words_in_vocab, words_not_in_vocab)
 
     def get_glove_vectors(self, word_list):
         c_word_vocab = 0
@@ -177,8 +164,6 @@ def get_nearest_neighbours(
     property_list,
     property_embeddings,
 ):
-    num_nearest_neighbours = 10
-
     con_similar_properties = NearestNeighbors(
         n_neighbors=num_nearest_neighbours, algorithm="brute"
     ).fit(np.array(property_embeddings))
@@ -193,7 +178,7 @@ def get_nearest_neighbours(
     con_similar_prop_dict = {}
     # file_name = os.path.join(save_dir, dataset_params["dataset_name"]) + ".tsv"
 
-    file_name = f"concept_similar_properties.txt"
+    file_name = f"concept_similar_wiki_words.txt"
 
     with open(file_name, "w") as file:
         for con_idx, prop_idx in enumerate(con_indices):
@@ -254,81 +239,77 @@ class RelBertEmbeddings:
 # wv_format_glove_file = "/scratch/c.scmag3/glove/glove.840B.300d.word2vec.format.txt"
 
 # 42B
-wv_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
+w2v_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
 
-concept_file = "/scratch/c.scmag3/property_augmentation/data/ufet/clean_types.txt"
-property_file = (
-    "/scratch/c.scmag3/property_augmentation/data/prop_vocab/prop_vocab_cnetp_clean.txt"
-)
+concept_file = "/home/amitgajbhiye/cardiff_work/commonality_detection/datasets/ufet_clean_types.txt"
+wiki_word_file = "/home/amitgajbhiye/cardiff_work/commonality_detection/datasets/stopword_filtered_all_wikipedia.txt"
 
 num_nearest_neighbours = 50
 
 #########################
 
-gv = GloveVectorsGensim(wv_format_glove_file=wv_format_glove_file)
+gv = GloveVectorsGensim(wv_format_glove_file=w2v_format_glove_file)
 
 concept_list = gv.read_data(file_path=concept_file)
-property_list = gv.read_data(file_path=property_file)
+wiki_word_list = gv.read_data(file_path=wiki_word_file)
 
 con_in_vocab, gvs_concept = gv.get_glove_vectors(concept_list)
-prop_in_vocab, gvs_property = gv.get_glove_vectors(property_list)
+wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
 
 
 print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
-print(f"gvs_property.shape : {gvs_property.shape}", flush=True)
+print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
 
 print(f"con_in_vocab : {len(con_in_vocab)}, {con_in_vocab}", flush=True)
-print(f"prop_in_vocab : {len(prop_in_vocab)}, {prop_in_vocab}", flush=True)
+print(f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}, {gvs_wiki_word}", flush=True)
 
 
 con_similar_prop_file = get_nearest_neighbours(
     num_nearest_neighbours=num_nearest_neighbours,
     concept_list=concept_list,
     concept_embeddings=gvs_concept,
-    property_list=property_list,
-    property_embeddings=gvs_property,
+    property_list=wiki_word_list,
+    property_embeddings=gvs_wiki_word,
 )
 
 
-relbert = RelBertEmbeddings()
-con_prop_list = relbert.read_data(con_similar_prop_file)
-relbert_embeds = relbert.get_relbert_embeds(con_prop_list, batch_size=32)
+# relbert = RelBertEmbeddings()
+# con_prop_list = relbert.read_data(con_similar_prop_file)
+# relbert_embeds = relbert.get_relbert_embeds(con_prop_list, batch_size=32)
 
-print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
-
-
-con_prop_rel_embeds = []
-
-for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
-    con_prop = "#".join(con_prop)
-    con_prop_rel_embeds.append([con_prop, rel_embed])
+# print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
 
 
-with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
-    pickle.dump(con_prop_rel_embeds, emb_pkl)
+# con_prop_rel_embeds = []
+
+# for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
+#     con_prop = "#".join(con_prop)
+#     con_prop_rel_embeds.append([con_prop, rel_embed])
 
 
-def hdbscan_clusters(embeds):
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=5, gen_min_span_tree=True)
-    clusterer.fit(np.array(embeds))
-
-    return (clusterer.labels_, clusterer.probabilities_)
+# with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
+#     pickle.dump(con_prop_rel_embeds, emb_pkl)
 
 
-print("Starting Clustering ...", flush=True)
+# def hdbscan_clusters(embeds):
+#     clusterer = hdbscan.HDBSCAN(min_cluster_size=5, gen_min_span_tree=True)
+#     clusterer.fit(np.array(embeds))
 
-labels, probs = hdbscan_clusters(relbert_embeds)
-
-print("Finished Clustering ...", flush=True)
+#     return (clusterer.labels_, clusterer.probabilities_)
 
 
-df = pd.DataFrame(con_prop_list, columns=["concept", "property"])
-df["cluster_label"] = labels
-df["cluster_probs"] = probs
+# print("Starting Clustering ...", flush=True)
+# labels, probs = hdbscan_clusters(relbert_embeds)
+# print("Finished Clustering ...", flush=True)
 
-df.sort_values("cluster_label", axis=0, inplace=True)
 
-print(f"Df Shape : {df.shape}")
-print(df.head(n=10))
+# df = pd.DataFrame(con_prop_list, columns=["concept", "property"])
+# df["cluster_label"] = labels
+# df["cluster_probs"] = probs
 
-df.to_csv("clustered_con_prop.txt", sep="\t", header=True, index=False)
+# df.sort_values("cluster_label", axis=0, inplace=True)
+
+# print(f"Df Shape : {df.shape}")
+# print(df.head(n=10))
+
+# df.to_csv("clustered_con_prop.txt", sep="\t", header=True, index=False)
