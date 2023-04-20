@@ -17,6 +17,6 @@
 
 conda activate venv
 
-python3 gensim_modelling.py
+python3 commonality/gensim_modelling.py
 
 echo 'Job Finished !!!'
