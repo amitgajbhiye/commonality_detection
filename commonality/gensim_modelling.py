@@ -7,7 +7,7 @@ import hdbscan
 import pandas as pd
 import copy
 import sys
-
+from pathlib import Path
 
 from gensim.models import KeyedVectors
 
@@ -17,6 +17,7 @@ from nltk.stem import WordNetLemmatizer
 from relbert import RelBERT
 
 sys.path.insert(0, os.getcwd())
+sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
 
 log = logging.getLogger(__name__)
 
