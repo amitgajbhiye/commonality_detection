@@ -43,9 +43,9 @@ class Vocabulary:
     def add_sentence(self, sentence):
         sentence_len = 0
 
-        sent = sentence.translate(str.maketrans("", "", string.punctuation))
+        # sent = sentence.translate(str.maketrans("", "", string.punctuation))
 
-        tokenised_text = self.tokenizer(sent)
+        tokenised_text = self.tokenizer(sentence)
         tokenised_text = [
             word for word in tokenised_text if word not in self.stop_words
         ]
