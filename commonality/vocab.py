@@ -43,7 +43,7 @@ class Vocabulary:
     def add_sentence(self, sentence):
         sentence_len = 0
 
-        # sentence = sentence.translate(str.maketrans("", "", string.punctuation))
+        sentence = sentence.translate(str.maketrans("", "", string.punctuation))
 
         tokenised_text = self.tokenizer(sentence)
 
@@ -114,7 +114,9 @@ def main():
     # print("Number of Words")
     # print(vocab.word2count)
 
-    vocab.write_word_count_to_file("datasets/word_counts_en_wikipedia.txt")
+    vocab.write_word_count_to_file(
+        "datasets/word_counts_en_wikipedia_without_stopwords.txt"
+    )
 
 
 if __name__ == "__main__":

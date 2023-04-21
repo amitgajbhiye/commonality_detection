@@ -13,7 +13,7 @@
 
 #SBATCH --mem=15G
 
-#SBATCH -t 2-00:00:00
+#SBATCH -t 0-10:00:00
 
 conda activate venv
 
