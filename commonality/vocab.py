@@ -1,8 +1,11 @@
 import csv
 import os
+import string
 import sys
 from pathlib import Path
 
+import nltk
+from nltk.corpus import stopwords
 from torchtext.data import get_tokenizer
 
 sys.path.insert(0, os.getcwd())
@@ -24,6 +27,7 @@ class Vocabulary:
         self.longest_sentence = 0
 
         self.tokenizer = get_tokenizer("basic_english")
+        self.stop_words = stopwords.words("english")
 
     def add_word(self, word):
         if word not in self.word2index:
@@ -39,9 +43,12 @@ class Vocabulary:
     def add_sentence(self, sentence):
         sentence_len = 0
 
-        tokenised_text = self.tokenizer(
-            sentence,
-        )
+        sent = sentence.translate(str.maketrans("", "", string.punctuation))
+
+        tokenised_text = self.tokenizer(sent)
+        tokenised_text = [
+            word for word in tokenised_text if word not in self.stop_words
+        ]
 
         for word in tokenised_text:
             sentence_len += 1
