@@ -43,9 +43,10 @@ class Vocabulary:
     def add_sentence(self, sentence):
         sentence_len = 0
 
-        # sent = sentence.translate(str.maketrans("", "", string.punctuation))
+        # sentence = sentence.translate(str.maketrans("", "", string.punctuation))
 
         tokenised_text = self.tokenizer(sentence)
+
         tokenised_text = [
             word for word in tokenised_text if word not in self.stop_words
         ]
@@ -108,12 +109,12 @@ def main():
 
     vocab = Vocabulary("en_wikipedia")
 
-    make_vocab(vocab=vocab, file_name=file_name, num_sent_to_process=1000000)
+    make_vocab(vocab=vocab, file_name=file_name, num_sent_to_process=None)
 
-    print("Number of Words")
-    print(vocab.word2count)
+    # print("Number of Words")
+    # print(vocab.word2count)
 
-    vocab.write_word_count_to_file("datasets/word_counts_100K_en_wikipedia.txt")
+    vocab.write_word_count_to_file("datasets/word_counts_en_wikipedia.txt")
 
 
 if __name__ == "__main__":
