@@ -97,7 +97,7 @@ def main():
     print("Building English Wikipedia Vocabulary")
 
     # file_name = "/home/amitgajbhiye/Downloads/dummy_en_wikipedia.txt"
-    file_name = "/scratch/c.scmag3/en_wikipedia"
+    file_name = "/scratch/c.scmag3/en_wikipedia/en_wikipedia.txt"
 
     vocab = Vocabulary("en_wikipedia")
 
