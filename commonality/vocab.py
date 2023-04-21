@@ -108,7 +108,7 @@ def main():
 
     vocab = Vocabulary("en_wikipedia")
 
-    make_vocab(vocab=vocab, file_name=file_name, num_sent_to_process=100000)
+    make_vocab(vocab=vocab, file_name=file_name, num_sent_to_process=1000000)
 
     print("Number of Words")
     print(vocab.word2count)

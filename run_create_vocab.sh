@@ -12,9 +12,9 @@
 #SBATCH -p highmem
 ##SBATCH --gres=gpu:1
 
-#SBATCH --mem=5G
+#SBATCH --mem=10G
 
-#SBATCH -t 0-01:00:00
+#SBATCH -t 0-02:00:00
 
 conda activate venv
 
