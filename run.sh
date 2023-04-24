@@ -10,9 +10,9 @@
 #SBATCH -A scw1858
 
 #SBATCH -p highmem
-#SBATCH --mem=10G
+#SBATCH --mem=40G
 
-#SBATCH -t 0-01:30:00
+#SBATCH -t 0-02:30:00
 
 ##SBATCH --gres=gpu:1
 
