@@ -1,12 +1,13 @@
 import csv
 import os
-import string
+
 import sys
 from pathlib import Path
 
 import nltk
 from nltk.corpus import stopwords
 from torchtext.data import get_tokenizer
+from gensim_modelling import GloveVectorsGensim
 
 sys.path.insert(0, os.getcwd())
 sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
@@ -43,13 +44,13 @@ class Vocabulary:
     def add_sentence(self, sentence):
         sentence_len = 0
 
-        sentence = sentence.translate(str.maketrans("", "", string.punctuation))
+        # sentence = sentence.translate(str.maketrans("", "", string.punctuation))
 
         tokenised_text = self.tokenizer(sentence)
 
-        tokenised_text = [
-            word for word in tokenised_text if word not in self.stop_words
-        ]
+        # tokenised_text = [
+        #     word for word in tokenised_text if word not in self.stop_words
+        # ]
 
         for word in tokenised_text:
             sentence_len += 1
@@ -80,7 +81,7 @@ class Vocabulary:
             w = csv.writer(out_file, delimiter="\t")
             w.writerows(sorted_word2count.items())
 
-        print(f"Word counts written to file : {file_name}")
+        print(f"Wiki Words count written to file : {file_name}")
 
 
 def make_vocab(vocab, file_name, num_sent_to_process=None):
@@ -101,11 +102,46 @@ def make_vocab(vocab, file_name, num_sent_to_process=None):
                 break
 
 
+def get_glove_words_count(w2v_glove_file, wiki_vocab, out_glove_wiki_count_file):
+    gv = GloveVectorsGensim(wv_format_glove_file=w2v_glove_file)
+    glove_vocab = gv.glove_model.key_to_index.keys()
+
+    glove_vocab_set = set(glove_vocab)
+    wiki_vocab_set = set(wiki_vocab.word2count.keys())
+
+    glove_wiki_words = glove_vocab_set.intersection(wiki_vocab_set)
+    wiki_words_not_in_glove = wiki_vocab_set.difference(glove_vocab_set)
+
+    print(flush=True)
+    print(f"glove_wiki_words: {glove_wiki_words}")
+    print(flush=True)
+    print(f"wiki_words_not_in_glove : {wiki_words_not_in_glove}")
+    print(flush=True)
+
+    glove_wiki_word_counts = {k: wiki_vocab.word2count[k] for k in glove_wiki_words}
+
+    sorted_glove_wiki_word_counts = {
+        k: v
+        for k, v in sorted(
+            glove_wiki_word_counts.items(), key=lambda item: item[1], reverse=True
+        )
+    }
+
+    with open(out_glove_wiki_count_file, "w") as out_file:
+        w = csv.writer(out_file, delimiter="\t")
+        w.writerows(sorted_glove_wiki_word_counts.items())
+
+    print(f"Glove Words Wiki count written to file : {out_glove_wiki_count_file}")
+
+
 def main():
     print("Building English Wikipedia Vocabulary")
 
-    # file_name = "/home/amitgajbhiye/Downloads/dummy_en_wikipedia.txt"
     file_name = "/scratch/c.scmag3/en_wikipedia/en_wikipedia.txt"
+    w2v_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
+
+    # file_name = "/home/amitgajbhiye/Downloads/dummy_en_wikipedia.txt"
+    # w2v_format_glove_file = "/home/amitgajbhiye/Downloads/embeddings_con_prop/glove.42B.300d.word2vec.format.txt"
 
     vocab = Vocabulary("en_wikipedia")
 
@@ -114,8 +150,13 @@ def main():
     # print("Number of Words")
     # print(vocab.word2count)
 
-    vocab.write_word_count_to_file(
-        "datasets/word_counts_en_wikipedia_without_stopwords.txt"
+    vocab.write_word_count_to_file("datasets/word_counts_en_wikipedia.txt")
+
+    out_glove_wiki_count_file = "datasets/glove_words_wiki_count.txt"
+    get_glove_words_count(
+        w2v_glove_file=w2v_format_glove_file,
+        wiki_vocab=vocab,
+        out_glove_wiki_count_file=out_glove_wiki_count_file,
     )
 
 

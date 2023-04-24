@@ -90,23 +90,28 @@ def get_nearest_neighbours(
     log.info(f"Finished getting similar properties")
 
 
-gv = GloveVectors()
+def main():
+    gv = GloveVectors()
 
-concept_lists = gv.read_data(
-    file_path="/home/amitgajbhiye/cardiff_work/property_augmentation/data/ufet/clean_types.txt"
-)
+    concept_lists = gv.read_data(
+        file_path="/home/amitgajbhiye/cardiff_work/property_augmentation/data/ufet/clean_types.txt"
+    )
 
-property_list = gv.read_data(
-    file_path="/home/amitgajbhiye/cardiff_work/property_augmentation/data/prop_vocab/prop_vocab_cnetp_clean.txt"
-)
+    property_list = gv.read_data(
+        file_path="/home/amitgajbhiye/cardiff_work/property_augmentation/data/prop_vocab/prop_vocab_cnetp_clean.txt"
+    )
 
-gvs_concept = gv.get_glove_vectors(concept_lists)
-gvs_property = gv.get_glove_vectors(property_list)
+    gvs_concept = gv.get_glove_vectors(concept_lists)
+    gvs_property = gv.get_glove_vectors(property_list)
 
-get_nearest_neighbours(
-    num_nearest_neighbours=10,
-    concept_list=concept_lists,
-    concept_embeddings=gvs_concept,
-    property_list=property_list,
-    property_embeddings=gvs_property,
-)
+    get_nearest_neighbours(
+        num_nearest_neighbours=10,
+        concept_list=concept_lists,
+        concept_embeddings=gvs_concept,
+        property_list=property_list,
+        property_embeddings=gvs_property,
+    )
+
+
+if __name__ == "__main__":
+    main()

@@ -198,85 +198,85 @@ class RelBertEmbeddings:
         return self.relbert_model.get_embedding(con_prop_list, batch_size=batch_size)
 
 
-#########################
-# Hawk Paths
+def main():
+    #########################
+    # Hawk Paths
 
-# wv_format_glove_file = "/scratch/c.scmag3/glove/glove.840B.300d.word2vec.format.txt"
+    # wv_format_glove_file = "/scratch/c.scmag3/glove/glove.840B.300d.word2vec.format.txt"
 
-# 42B
-w2v_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
+    # 42B
+    w2v_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
 
-concept_file = "/scratch/c.scmag3/commonality_detection/datasets/ufet_clean_types.txt"
-wiki_word_file = "/scratch/c.scmag3/commonality_detection/datasets/stopword_filtered_all_wikipedia.txt"
+    concept_file = (
+        "/scratch/c.scmag3/commonality_detection/datasets/ufet_clean_types.txt"
+    )
+    wiki_word_file = "/scratch/c.scmag3/commonality_detection/datasets/stopword_filtered_all_wikipedia.txt"
 
-num_nearest_neighbours = 50
+    num_nearest_neighbours = 50
 
-#########################
+    #########################
 
-gv = GloveVectorsGensim(wv_format_glove_file=w2v_format_glove_file)
+    gv = GloveVectorsGensim(wv_format_glove_file=w2v_format_glove_file)
 
-concept_list = gv.read_data(file_path=concept_file)
-wiki_word_list = gv.read_data(file_path=wiki_word_file)
+    concept_list = gv.read_data(file_path=concept_file)
+    wiki_word_list = gv.read_data(file_path=wiki_word_file)
 
-con_in_vocab, gvs_concept = gv.get_glove_vectors(concept_list)
-wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
+    con_in_vocab, gvs_concept = gv.get_glove_vectors(concept_list)
+    wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
+
+    print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
+    print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
+
+    print(f"con_in_vocab : {len(con_in_vocab)}, {con_in_vocab}", flush=True)
+    print(
+        f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}, {wiki_word_in_vocab}",
+        flush=True,
+    )
+
+    con_similar_prop_file = get_nearest_neighbours(
+        num_nearest_neighbours=num_nearest_neighbours,
+        concept_list=concept_list,
+        concept_embeddings=gvs_concept,
+        property_list=wiki_word_list,
+        property_embeddings=gvs_wiki_word,
+    )
+
+    # relbert = RelBertEmbeddings()
+    # con_prop_list = relbert.read_data(con_similar_prop_file)
+    # relbert_embeds = relbert.get_relbert_embeds(con_prop_list, batch_size=32)
+
+    # print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
+
+    # con_prop_rel_embeds = []
+
+    # for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
+    #     con_prop = "#".join(con_prop)
+    #     con_prop_rel_embeds.append([con_prop, rel_embed])
+
+    # with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
+    #     pickle.dump(con_prop_rel_embeds, emb_pkl)
+
+    # def hdbscan_clusters(embeds):
+    #     clusterer = hdbscan.HDBSCAN(min_cluster_size=5, gen_min_span_tree=True)
+    #     clusterer.fit(np.array(embeds))
+
+    #     return (clusterer.labels_, clusterer.probabilities_)
+
+    # print("Starting Clustering ...", flush=True)
+    # labels, probs = hdbscan_clusters(relbert_embeds)
+    # print("Finished Clustering ...", flush=True)
+
+    # df = pd.DataFrame(con_prop_list, columns=["concept", "property"])
+    # df["cluster_label"] = labels
+    # df["cluster_probs"] = probs
+
+    # df.sort_values("cluster_label", axis=0, inplace=True)
+
+    # print(f"Df Shape : {df.shape}")
+    # print(df.head(n=10))
+
+    # df.to_csv("clustered_con_prop.txt", sep="\t", header=True, index=False)
 
 
-print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
-print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
-
-print(f"con_in_vocab : {len(con_in_vocab)}, {con_in_vocab}", flush=True)
-print(
-    f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}, {wiki_word_in_vocab}", flush=True
-)
-
-
-con_similar_prop_file = get_nearest_neighbours(
-    num_nearest_neighbours=num_nearest_neighbours,
-    concept_list=concept_list,
-    concept_embeddings=gvs_concept,
-    property_list=wiki_word_list,
-    property_embeddings=gvs_wiki_word,
-)
-
-
-# relbert = RelBertEmbeddings()
-# con_prop_list = relbert.read_data(con_similar_prop_file)
-# relbert_embeds = relbert.get_relbert_embeds(con_prop_list, batch_size=32)
-
-# print(f"relbert_embeds.shape : {torch.tensor(relbert_embeds).shape}", flush=True)
-
-
-# con_prop_rel_embeds = []
-
-# for con_prop, rel_embed in zip(con_prop_list, relbert_embeds):
-#     con_prop = "#".join(con_prop)
-#     con_prop_rel_embeds.append([con_prop, rel_embed])
-
-
-# with open("con_prop_relbert_embeddings.pkl", "wb") as emb_pkl:
-#     pickle.dump(con_prop_rel_embeds, emb_pkl)
-
-
-# def hdbscan_clusters(embeds):
-#     clusterer = hdbscan.HDBSCAN(min_cluster_size=5, gen_min_span_tree=True)
-#     clusterer.fit(np.array(embeds))
-
-#     return (clusterer.labels_, clusterer.probabilities_)
-
-
-# print("Starting Clustering ...", flush=True)
-# labels, probs = hdbscan_clusters(relbert_embeds)
-# print("Finished Clustering ...", flush=True)
-
-
-# df = pd.DataFrame(con_prop_list, columns=["concept", "property"])
-# df["cluster_label"] = labels
-# df["cluster_probs"] = probs
-
-# df.sort_values("cluster_label", axis=0, inplace=True)
-
-# print(f"Df Shape : {df.shape}")
-# print(df.head(n=10))
-
-# df.to_csv("clustered_con_prop.txt", sep="\t", header=True, index=False)
+if __name__ == "__main__":
+    main()
