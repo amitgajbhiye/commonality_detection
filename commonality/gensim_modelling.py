@@ -142,7 +142,7 @@ def get_nearest_neighbours(
     property_embeddings,
 ):
     con_similar_properties = NearestNeighbors(
-        n_neighbors=num_nearest_neighbours, algorithm="brute"
+        n_neighbors=num_nearest_neighbours, algorithm="brute", metric="cosine"
     ).fit(np.array(property_embeddings))
 
     con_distances, con_indices = con_similar_properties.kneighbors(
