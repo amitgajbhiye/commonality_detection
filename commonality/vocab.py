@@ -113,6 +113,9 @@ def get_glove_words_count(w2v_glove_file, wiki_vocab, out_glove_wiki_count_file)
     glove_wiki_words = glove_vocab_set.intersection(wiki_vocab_set)
     wiki_words_not_in_glove = wiki_vocab_set.difference(glove_vocab_set)
 
+    with open("datasets/wiki_words_not_in_glove.txt", "w") as file:
+        file.write("\n".join(list(wiki_words_not_in_glove)))
+
     print(flush=True)
     print(f"num_glove_words : {len(glove_vocab_set)}", flush=True)
     print(f"num_wiki_words: {len(wiki_vocab_set)}", flush=True)

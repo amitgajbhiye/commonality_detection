@@ -34,6 +34,25 @@ class GloveVectorsGensim:
 
         return lines
 
+    def read_wiki_data(self, file_path, take_top_k_words=None):
+        wiki_df = pd.read_csv(file_path, sep="\t", names=["word", "frequency"])
+
+        print(f"Wiki words file read in a dataframe : {wiki_df.shape}")
+        sorted_wiki_df = wiki_df.sort_values(
+            by=["frequency"], inplace=False, ascending=False
+        )
+
+        if take_top_k_words:
+            print("Taking Top {take_top_k} words")
+
+            wiki_word_list = sorted_wiki_df["word"].values[0:take_top_k_words].tolist()
+
+        else:
+            print("Taking all the wiki words")
+            wiki_word_list = sorted_wiki_df["word"].tolist()
+
+        return wiki_word_list
+
     def get_vocab(self):
         vocab = self.glove_model.key_to_index.keys()
         log.info(f"Vocab Size : {len(vocab)}")
@@ -140,6 +159,7 @@ def get_nearest_neighbours(
     concept_embeddings,
     property_list,
     property_embeddings,
+    output_file,
 ):
     con_similar_properties = NearestNeighbors(
         n_neighbors=num_nearest_neighbours, algorithm="brute", metric="cosine"
@@ -154,9 +174,9 @@ def get_nearest_neighbours(
 
     con_similar_prop_dict = {}
 
-    file_name = f"datasets/concept_50similar_wiki_words.txt"
+    # file_name = f"datasets/concept_{num_nearest_neighbours}similar_wiki_words.txt"
 
-    with open(file_name, "w") as file:
+    with open(output_file, "w") as file:
         for con_idx, prop_idx in enumerate(con_indices):
             concept = concept_list[con_idx]
             similar_properties = [property_list[idx] for idx in prop_idx]
@@ -177,9 +197,23 @@ def get_nearest_neighbours(
                 line = concept + "\t" + prop + "\n"
                 file.write(line)
 
+    con_sim_wiki_word_df = pd.read_csv(
+        output_file, sep="\t", names=["concept", "wiki_word"]
+    )
+
+    con_sim_wiki_word_df["counts"] = con_sim_wiki_word_df.groupby(
+        ["wiki_word"]
+    ).transform("count")
+
+    con_sim_wiki_word_df.sort_values(by=["counts"], inplace=True, ascending=False)
+
+    sorted_fn = os.path.splitext(output_file)[0] + "wiki_words_sorted_counts.txt"
+
+    con_sim_wiki_word_df.to_csv(sorted_fn, sep="\t", header=False, index=False)
+
     log.info(f"Finished getting similar properties")
 
-    return file_name
+    return sorted_fn
 
 
 class RelBertEmbeddings:
@@ -210,36 +244,66 @@ def main():
     concept_file = (
         "/scratch/c.scmag3/commonality_detection/datasets/ufet_clean_types.txt"
     )
-    wiki_word_file = "datasets/stopword_punctuation_filtered_all_wikipedia.txt"
-
-    num_nearest_neighbours = 30
+    wiki_word_frequency_file = "datasets/glove_words_wiki_count_pytorch_tok.txt"
 
     #########################
 
     gv = GloveVectorsGensim(wv_format_glove_file=w2v_format_glove_file)
 
     concept_list = gv.read_data(file_path=concept_file)
-    wiki_word_list = gv.read_data(file_path=wiki_word_file)
-
     con_in_vocab, gvs_concept = gv.get_glove_vectors(concept_list)
-    wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
 
-    print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
-    print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
+    top_k_wiki_words = [
+        5000,
+        8000,
+        10000,
+        12000,
+        15000,
+        18000,
+        20000,
+        22000,
+        25000,
+        28000,
+        30000,
+    ]
+    num_nearest_neighbours = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 
-    print(f"con_in_vocab : {len(con_in_vocab)}, {con_in_vocab}", flush=True)
-    print(
-        f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}, {wiki_word_in_vocab}",
-        flush=True,
-    )
+    for top_k_wiki_words in top_k_wiki_words:
+        for num_nn in num_nearest_neighbours:
+            print("*" * 50, flush=True)
+            print(
+                f"new_run : Top {top_k_wiki_words} wiki words, {num_nn} Nearest Neighbours",
+                flush=True,
+            )
+            print("*" * 50, flush=True)
 
-    con_similar_prop_file = get_nearest_neighbours(
-        num_nearest_neighbours=num_nearest_neighbours,
-        concept_list=concept_list,
-        concept_embeddings=gvs_concept,
-        property_list=wiki_word_list,
-        property_embeddings=gvs_wiki_word,
-    )
+            wiki_word_list = gv.read_wiki_data(
+                file_path=wiki_word_frequency_file, take_top_k_words=top_k_wiki_words
+            )
+
+            wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
+
+            print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
+            print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
+
+            print(f"con_in_vocab : {len(con_in_vocab)}", flush=True)
+            print(
+                f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}",
+                flush=True,
+            )
+
+            out_file = (
+                f"datasets/concept_{num_nn}similar_{top_k_wiki_words}wiki_words.txt"
+            )
+
+            con_similar_prop_file = get_nearest_neighbours(
+                num_nearest_neighbours=num_nn,
+                concept_list=concept_list,
+                concept_embeddings=gvs_concept,
+                property_list=wiki_word_list,
+                property_embeddings=gvs_wiki_word,
+                output_file=out_file,
+            )
 
     # relbert = RelBertEmbeddings()
     # con_prop_list = relbert.read_data(con_similar_prop_file)
