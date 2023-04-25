@@ -55,7 +55,7 @@ class GloveVectorsGensim:
 
     def get_vocab(self):
         vocab = self.glove_model.key_to_index.keys()
-        log.info(f"Vocab Size : {len(vocab)}")
+        print(f"Vocab Size : {len(vocab)}")
 
         return vocab
 
@@ -205,7 +205,7 @@ def get_nearest_neighbours(
         ["wiki_word"]
     ).transform("count")
 
-    # con_sim_wiki_word_df.sort_values(by=["counts"], inplace=True, ascending=False)
+    con_sim_wiki_word_df.sort_values(by=["wiki_word"], inplace=True, ascending=False)
 
     sorted_fn = os.path.splitext(output_file)[0] + "wiki_words_clustered.txt"
 
@@ -253,6 +253,9 @@ def main():
     concept_list = gv.read_data(file_path=concept_file)
     con_in_vocab, gvs_concept = gv.get_glove_vectors(concept_list)
 
+    print(f"concept_list : {len(concept_list)}")
+    print(f"con_in_vocab : {len(con_in_vocab)}")
+
     all_glove_word_list_1 = gv.get_vocab()
 
     print(f"all_glove_word_list_1: {len(all_glove_word_list_1)}")
@@ -261,7 +264,7 @@ def main():
 
     print(f"all_glove_word_list_2 : {len(all_glove_word_list_2)}")
 
-    num_nearest_neighbours = [50]
+    num_nearest_neighbours = [30, 50]
 
     for num_nn in num_nearest_neighbours:
         # wiki_word_list = gv.read_wiki_data(
@@ -286,7 +289,7 @@ def main():
 
         con_similar_prop_file = get_nearest_neighbours(
             num_nearest_neighbours=num_nn,
-            concept_list=concept_list,
+            concept_list=con_in_vocab,
             concept_embeddings=gvs_concept,
             property_list=all_glove_word_list_2,
             property_embeddings=gvs_all_glove,
