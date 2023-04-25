@@ -159,9 +159,9 @@ def main():
     print("num_wiki_words: Number of Wiki Words", flush=True)
     print(len(vocab.word2count.keys()))
 
-    vocab.write_word_count_to_file("datasets/word_counts_en_wikipedia.txt")
+    vocab.write_word_count_to_file("datasets/word_counts_en_wikipedia_pytorch_tok.txt")
 
-    out_glove_wiki_count_file = "datasets/glove_words_wiki_count.txt"
+    out_glove_wiki_count_file = "datasets/glove_words_wiki_count_pytorch_tok.txt"
     get_glove_words_count(
         w2v_glove_file=w2v_format_glove_file,
         wiki_vocab=vocab,
