@@ -79,13 +79,13 @@ class GloveVectorsGensim:
                 c_word_vocab += 1
 
             else:
-                underscore_word = "_".join(word.split())
+                underscore_word = "_".join(str(word).split())
                 if underscore_word in vocab:
                     undescore_word_vocab.append(underscore_word)
                     c_undescore_word_vocab += 1
 
                 else:
-                    hyphen_word = "-".join(word.split())
+                    hyphen_word = "-".join(str(word).split())
 
                     if hyphen_word in vocab:
                         hyphen_word_vocab.append(hyphen_word)
