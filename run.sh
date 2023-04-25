@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=comDet
 
-#SBATCH --output=logs/out_grid_com_det_ufet_wiki_words.txt
-#SBATCH --error=logs/err_grid_com_det_ufet_wiki_words.txt
+#SBATCH --output=logs/out_all_com_det_ufet_wiki_words.txt
+#SBATCH --error=logs/err_all_com_det_ufet_wiki_words.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
@@ -12,7 +12,7 @@
 #SBATCH -p highmem
 #SBATCH --mem=20G
 
-#SBATCH -t 2-00:00:00
+#SBATCH -t 0-03:00:00
 
 ##SBATCH --gres=gpu:1
 
