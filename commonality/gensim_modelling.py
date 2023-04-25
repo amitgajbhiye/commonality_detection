@@ -43,7 +43,7 @@ class GloveVectorsGensim:
         )
 
         if take_top_k_words:
-            print("Taking Top {take_top_k} words")
+            print(f"Taking Top {take_top_k_words} words")
 
             wiki_word_list = sorted_wiki_df["word"].values[0:take_top_k_words].tolist()
 
@@ -265,6 +265,10 @@ def main():
         25000,
         28000,
         30000,
+        35000,
+        40000,
+        45000,
+        50000,
     ]
     num_nearest_neighbours = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 
@@ -293,8 +297,11 @@ def main():
             )
 
             out_file = (
-                f"datasets/concept_{num_nn}similar_{top_k_wiki_words}wiki_words.txt"
+                f"output_files/concept_{num_nn}similar_{top_k_wiki_words}wiki_words.txt"
             )
+
+            concept_list = np.array(concept_list, dtype=str)
+            wiki_word_list = np.array(wiki_word_list, dtype=str)
 
             con_similar_prop_file = get_nearest_neighbours(
                 num_nearest_neighbours=num_nn,
