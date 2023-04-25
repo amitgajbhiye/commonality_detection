@@ -205,9 +205,9 @@ def get_nearest_neighbours(
         ["wiki_word"]
     ).transform("count")
 
-    con_sim_wiki_word_df.sort_values(by=["counts"], inplace=True, ascending=False)
+    # con_sim_wiki_word_df.sort_values(by=["counts"], inplace=True, ascending=False)
 
-    sorted_fn = os.path.splitext(output_file)[0] + "wiki_words_sorted_counts.txt"
+    sorted_fn = os.path.splitext(output_file)[0] + "wiki_words_clustered.txt"
 
     con_sim_wiki_word_df.to_csv(sorted_fn, sep="\t", header=False, index=False)
 
@@ -253,53 +253,43 @@ def main():
     concept_list = gv.read_data(file_path=concept_file)
     con_in_vocab, gvs_concept = gv.get_glove_vectors(concept_list)
 
-    # top_k_wiki_words = [
-    #     5000,
-    #     8000,
-    #     10000,
-    #     12000,
-    #     15000,
-    #     18000,
-    #     20000,
-    #     22000,
-    #     25000,
-    #     28000,
-    #     30000,
-    #     35000,
-    #     40000,
-    #     45000,
-    #     50000,
-    # ]
-    # num_nearest_neighbours = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+    all_glove_word_list_1 = gv.get_vocab()
+
+    print(f"all_glove_word_list_1: {len(all_glove_word_list_1)}")
+
+    all_glove_word_list_2, gvs_all_glove = gv.get_glove_vectors(all_glove_word_list_1)
+
+    print(f"all_glove_word_list_2 : {len(all_glove_word_list_2)}")
+
     num_nearest_neighbours = [50]
 
     for num_nn in num_nearest_neighbours:
-        wiki_word_list = gv.read_wiki_data(
-            file_path=wiki_word_frequency_file, take_top_k_words=None
-        )
+        # wiki_word_list = gv.read_wiki_data(
+        #     file_path=wiki_word_frequency_file, take_top_k_words=None
+        # )
 
-        wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
+        # wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
 
-        print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
-        print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
+        # print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
+        # print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
 
-        print(f"con_in_vocab : {len(con_in_vocab)}", flush=True)
-        print(
-            f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}",
-            flush=True,
-        )
+        # print(f"con_in_vocab : {len(con_in_vocab)}", flush=True)
+        # print(
+        #     f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}",
+        #     flush=True,
+        # )
 
         out_file = f"output_files/concept_{num_nn}similar_all_wiki_words.txt"
 
-        concept_list = np.array(concept_list, dtype=str)
-        wiki_word_list = np.array(wiki_word_list, dtype=str)
+        # concept_list = np.array(concept_list, dtype=str)
+        # wiki_word_list = np.array(wiki_word_list, dtype=str)
 
         con_similar_prop_file = get_nearest_neighbours(
             num_nearest_neighbours=num_nn,
             concept_list=concept_list,
             concept_embeddings=gvs_concept,
-            property_list=wiki_word_list,
-            property_embeddings=gvs_wiki_word,
+            property_list=all_glove_word_list_2,
+            property_embeddings=gvs_all_glove,
             output_file=out_file,
         )
 
