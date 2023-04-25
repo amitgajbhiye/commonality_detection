@@ -46,7 +46,8 @@ class Vocabulary:
 
         # sentence = sentence.translate(str.maketrans("", "", string.punctuation))
 
-        tokenised_text = self.tokenizer(sentence)
+        # tokenised_text = self.tokenizer(sentence)
+        tokenised_text = sentence.split()
 
         # tokenised_text = [
         #     word for word in tokenised_text if word not in self.stop_words
@@ -90,7 +91,7 @@ def make_vocab(vocab, file_name, num_sent_to_process=None):
     with open(file_name, "r") as in_f:
         for sent in in_f:
             sent = sent.strip()
-            print(sent)
+            # print(sent)
             vocab.add_sentence(sent)
 
             sent_counter += 1
@@ -113,9 +114,17 @@ def get_glove_words_count(w2v_glove_file, wiki_vocab, out_glove_wiki_count_file)
     wiki_words_not_in_glove = wiki_vocab_set.difference(glove_vocab_set)
 
     print(flush=True)
-    print(f"glove_wiki_words: {glove_wiki_words}")
+    print(f"num_glove_words : {len(glove_vocab_set)}", flush=True)
+    print(f"num_wiki_words: {len(wiki_vocab_set)}", flush=True)
+    print(
+        f"num_glove_wiki_words: {len(glove_wiki_words)}; Words common in Glove and Wiki",
+        flush=True,
+    )
     print(flush=True)
-    print(f"wiki_words_not_in_glove : {wiki_words_not_in_glove}")
+    print(
+        f"num_wiki_words_not_in_glove : {len(wiki_words_not_in_glove)}; Words that are in Wiki but not in Glove",
+        flush=True,
+    )
     print(flush=True)
 
     glove_wiki_word_counts = {k: wiki_vocab.word2count[k] for k in glove_wiki_words}
@@ -137,18 +146,18 @@ def get_glove_words_count(w2v_glove_file, wiki_vocab, out_glove_wiki_count_file)
 def main():
     print("Building English Wikipedia Vocabulary")
 
-    file_name = "/scratch/c.scmag3/en_wikipedia/en_wikipedia.txt"
-    w2v_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
-
     # file_name = "/home/amitgajbhiye/Downloads/dummy_en_wikipedia.txt"
     # w2v_format_glove_file = "/home/amitgajbhiye/Downloads/embeddings_con_prop/glove.42B.300d.word2vec.format.txt"
+
+    file_name = "/scratch/c.scmag3/en_wikipedia/en_wikipedia.txt"
+    w2v_format_glove_file = "/scratch/c.scmag3/glove/glove.42B.300d.word2vec.format.txt"
 
     vocab = Vocabulary("en_wikipedia")
 
     make_vocab(vocab=vocab, file_name=file_name, num_sent_to_process=None)
 
-    # print("Number of Words")
-    # print(vocab.word2count)
+    print("num_wiki_words: Number of Wiki Words", flush=True)
+    print(len(vocab.word2count.keys()))
 
     vocab.write_word_count_to_file("datasets/word_counts_en_wikipedia.txt")
 
