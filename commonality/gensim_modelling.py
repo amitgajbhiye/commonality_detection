@@ -154,7 +154,7 @@ def get_nearest_neighbours(
 
     con_similar_prop_dict = {}
 
-    file_name = f"datasets/concept_30similar_wiki_words.txt"
+    file_name = f"datasets/concept_50similar_wiki_words.txt"
 
     with open(file_name, "w") as file:
         for con_idx, prop_idx in enumerate(con_indices):

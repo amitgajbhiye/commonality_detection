@@ -46,8 +46,8 @@ class Vocabulary:
 
         # sentence = sentence.translate(str.maketrans("", "", string.punctuation))
 
-        # tokenised_text = self.tokenizer(sentence)
-        tokenised_text = sentence.split()
+        tokenised_text = self.tokenizer(sentence)
+        # tokenised_text = sentence.split()
 
         # tokenised_text = [
         #     word for word in tokenised_text if word not in self.stop_words

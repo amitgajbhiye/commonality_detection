@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=getVOcab
 
-#SBATCH --output=logs/out_get_word_counts_en_wikipedia.txt
-#SBATCH --error=logs/err_get_word_counts_en_wikipedia.txt
+#SBATCH --output=logs/out_get_word_counts_en_wikipedia_pytorch_tok.txt
+#SBATCH --error=logs/err_get_word_counts_en_wikipedia_pytorch_tok.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
