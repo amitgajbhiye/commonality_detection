@@ -37,6 +37,8 @@ def find_closest_embeddings(embedding):
     )
 
 
+print("closest_words", flush=True)
+
 print(find_closest_embeddings(embeddings_dict["king"])[1:30], flush=True)
 print(flush=True)
 print(find_closest_embeddings(embeddings_dict["person"])[1:30], flush=True)
