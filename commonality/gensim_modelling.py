@@ -267,20 +267,20 @@ def main():
     num_nearest_neighbours = [30, 50]
 
     for num_nn in num_nearest_neighbours:
-        # wiki_word_list = gv.read_wiki_data(
-        #     file_path=wiki_word_frequency_file, take_top_k_words=None
-        # )
+        wiki_word_list = gv.read_wiki_data(
+            file_path=wiki_word_frequency_file, take_top_k_words=None
+        )
 
-        # wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
+        wiki_word_in_vocab, gvs_wiki_word = gv.get_glove_vectors(wiki_word_list)
 
-        # print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
-        # print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
+        print(f"gvs_concept.shape : {gvs_concept.shape}", flush=True)
+        print(f"gvs_wiki_word.shape : {gvs_wiki_word.shape}", flush=True)
 
-        # print(f"con_in_vocab : {len(con_in_vocab)}", flush=True)
-        # print(
-        #     f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}",
-        #     flush=True,
-        # )
+        print(f"con_in_vocab : {len(con_in_vocab)}", flush=True)
+        print(
+            f"wiki_word_in_vocab : {len(wiki_word_in_vocab)}",
+            flush=True,
+        )
 
         out_file = f"output_files/concept_{num_nn}similar_all_wiki_words.txt"
 
@@ -291,8 +291,8 @@ def main():
             num_nearest_neighbours=num_nn,
             concept_list=con_in_vocab,
             concept_embeddings=gvs_concept,
-            property_list=all_glove_word_list_2,
-            property_embeddings=gvs_all_glove,
+            property_list=wiki_word_in_vocab,
+            property_embeddings=gvs_wiki_word,
             output_file=out_file,
         )
 
