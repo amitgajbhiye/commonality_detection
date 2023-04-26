@@ -2,31 +2,30 @@ import numpy as np
 from scipy import spatial
 
 
-embeddings_dict = {}
+def load_glove_model(glove_file):
+    print("Loading Glove Model...")
 
-print(f"Loading Glove ... ")
+    embeddings_dict = {}
+    vector_size = 300
 
-with open("/scratch/c.scmag3/glove/glove.840B.300d.txt", "r", encoding="utf-8") as f:
-    for line in f:
-        ######
+    with open(glove_file, "r") as f:
+        for line in f:
+            split_line = line.split()
+            print(f"split_line : {split_line}")
+            word = " ".join(split_line[0 : len(split_line) - vector_size])
+            print(f"word : {word}")
+            embedding = np.array([float(val) for val in split_line[-vector_size:]])
+            print(f"embedding : {embedding}")
+            embeddings_dict[word] = embedding
 
-        print(line, flush=True)
+        print("Done.\n" + str(len(embeddings_dict)) + " words loaded!")
 
-        values = line.split()
-        word = values[0]
+    return embeddings_dict
 
-        print(values[0], flush=True)
-        print(values[1], flush=True)
-        print(flush=True)
 
-        vectors = np.asarray(values[1:], dtype=np.float32)
-
-        embeddings_dict[word] = vectors
-
-f.close()
+embeddings_dict = load_glove_model("/scratch/c.scmag3/glove/glove.840B.300d.txt")
 
 print("Loaded %s word vectors." % len(embeddings_dict))
-
 
 # define (euclidean) distance function
 
