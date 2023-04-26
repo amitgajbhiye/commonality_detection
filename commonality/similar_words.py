@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import spatial
+import pickle
 
 
 def load_glove_model(glove_file):
@@ -28,6 +29,11 @@ embeddings_dict = load_glove_model("/scratch/c.scmag3/glove/glove.840B.300d.txt"
 print("Loaded %s word vectors." % len(embeddings_dict))
 
 # define (euclidean) distance function
+
+with open(
+    "/scratch/c.scmag3/glove/glove.840B.300d_embedding_dict.pkl", "wb"
+) as pkl_file:
+    pickle.dump(embeddings_dict, pkl_file)
 
 
 def find_closest_embeddings(embedding):
