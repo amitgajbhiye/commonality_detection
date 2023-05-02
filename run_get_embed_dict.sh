@@ -1,9 +1,9 @@
 #!/bin/bash --login
 
-#SBATCH --job-name=FTembDICT
+#SBATCH --job-name=NBembDICT
 
-#SBATCH --output=logs/out_get_fasttext_embedding_dict.txt
-#SBATCH --error=logs/err_get_fasttext_embedding_dict.txt
+#SBATCH --output=logs/out_get_numberbatch_embedding_dict.txt
+#SBATCH --error=logs/err_get_numberbatch_embedding_dict.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5

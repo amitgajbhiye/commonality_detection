@@ -39,10 +39,22 @@ def load_vectors(fname, embed_dim, embed_format=None, out_file=None):
 
 
 # For Fasttext
-file_name = "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
+
+# file_name = "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
+# embed_dim = 300
+# embed_format = "word2vec"
+# out_file = "/scratch/c.scmag3/static_embeddings/fasttext_crawl_300d_2M_subword.vec_embedding_dict.pkl"
+
+
+# load_vectors(
+#     fname=file_name, embed_dim=embed_dim, embed_format=embed_format, out_file=out_file
+# )
+
+# For Numberbatch
+file_name = "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt"
 embed_dim = 300
 embed_format = "word2vec"
-out_file = "/scratch/c.scmag3/static_embeddings/fasttext_crawl_300d_2M_subword.vec_embedding_dict.pkl"
+out_file = "/scratch/c.scmag3/static_embeddings/numberbatch-en-19.08_embedding_dict.pkl"
 
 
 load_vectors(
