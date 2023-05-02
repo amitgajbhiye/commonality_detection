@@ -4,6 +4,7 @@ import sys
 import os
 from pathlib import Path
 from gensim.models import KeyedVectors
+import csv
 
 sys.path.insert(0, os.getcwd())
 sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
@@ -105,23 +106,38 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
             index_sim_dict.items(), key=lambda x: x[1], reverse=True
         )
 
-        sorted_sim_words = [(vocab[idx], score) for idx, score in sorted_index_sim_dict]
+        sorted_sim_words = [
+            (con, vocab[idx], score) for idx, score in sorted_index_sim_dict
+        ]
 
         print(f"Concept : {con}", flush=True)
         print(f"sorted_sim_words: {sorted_sim_words}", flush=True)
 
         print(flush=True)
 
+        return sorted_sim_words
+
     c_word_not_found = 0
+
+    con_not_in_vocab, all_con_similar_data = [], []
+
     for con in concept_1_list:
         if con in vocab:
-            get_similarity_score(con=con)
+            con_sim_word_score = get_similarity_score(con=con)
+            all_con_similar_data.extend(con_sim_word_score)
+
         else:
             c_word_not_found += 1
+            con_not_in_vocab.append(con)
             print(f"Concept not in Vocab : {con}", flush=True)
             print(flush=True)
 
     print(f"c_word_not_found : {c_word_not_found}")
+    print(f"con_not_in_vocab : {con_not_in_vocab}")
+
+    with open("numberbatch_con_similar.txt", "w") as out_file:
+        writer = csv.writer(out_file, delimiter="\t")
+        writer.writerows(all_con_similar_data)
 
 
 embedding_file = (
