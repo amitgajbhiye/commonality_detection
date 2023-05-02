@@ -83,7 +83,8 @@ def create_vector_model(fname):
     return vector_model
 
 
-def get_similar_words(vector_model, concept_1_list, sim_thresh):
+def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
+    vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
     vocab = np.array(vector_model.key_to_index.keys(), dtype=str)
 
     def get_similarity_score(con):
@@ -103,6 +104,8 @@ def get_similar_words(vector_model, concept_1_list, sim_thresh):
     for con in concept_1_list:
         if con in vocab:
             get_similarity_score(con=con)
+        else:
+            print(f"Concept not in Vocab : {con}")
 
 
 embedding_file = (
@@ -113,7 +116,9 @@ concept_1_file = "datasets/ufet_clean_types.txt"
 vector_model = create_vector_model(fname=embedding_file)
 
 concept_1_list = read_data(file_path=concept_1_file)
+print(f"Num concepts : {len(concept_1_list)}")
+
 
 get_similar_words(
-    vector_model=vector_model, concept_1_list=concept_1_list, sim_thresh=0.90
+    embedding_fname=embedding_file, concept_1_list=concept_1_list, sim_thresh=0.90
 )
