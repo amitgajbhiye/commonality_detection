@@ -111,8 +111,8 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
 
         print(f"Concept : {con}", flush=True)
         print(f"sim_words: {sim_words}", flush=True)
-        print(f"sim_scores : {sim_scores}", flush=True)
-        print(f"index_thresh : {index_thresh}", flush=True)
+        # print(f"sim_scores : {sim_scores}", flush=True)
+        # print(f"index_thresh : {index_thresh}", flush=True)
         print(f"index_sim_dict: {index_sim_dict}", flush=True)
         print(f"sorted_index_sim_dict: {sorted_index_sim_dict}", flush=True)
 
