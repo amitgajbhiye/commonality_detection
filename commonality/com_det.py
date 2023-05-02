@@ -86,7 +86,7 @@ def create_vector_model(fname):
 def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
     vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
 
-    vocab = np.array(vector_model.key_to_index.keys(), dtype=str)
+    vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
 
     print(f"Vocab Len : {vocab.shape}", flush=True)
     print(vocab, flush=True)
