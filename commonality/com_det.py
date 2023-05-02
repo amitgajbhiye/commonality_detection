@@ -85,7 +85,11 @@ def create_vector_model(fname):
 
 def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
     vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
+
     vocab = np.array(vector_model.key_to_index.keys(), dtype=str)
+
+    print(f"Vocab Len : {vocab.shape}", flush=True)
+    print(vocab, flush=True)
 
     def get_similarity_score(con):
         sim_scores = vector_model.most_similar(con, topn=None)
@@ -116,7 +120,7 @@ concept_1_file = "datasets/ufet_clean_types.txt"
 vector_model = create_vector_model(fname=embedding_file)
 
 concept_1_list = read_data(file_path=concept_1_file)
-print(f"Num concepts : {len(concept_1_list)}")
+print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 
 get_similar_words(
