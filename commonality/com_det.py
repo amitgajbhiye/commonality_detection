@@ -100,7 +100,9 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
         sim_scores = sim_scores[index_thresh]
 
         index_sim_dict = {k: v for k, v in zip(index_thresh, sim_scores)}
-        sorted_index_sim_dict = sorted(index_sim_dict.items(), key=lambda x: x[1])
+        sorted_index_sim_dict = sorted(
+            index_sim_dict.items(), key=lambda x: x[1], reverse=True
+        )
 
         print(f"Concept : {con}", flush=True)
         print(f"sim_words: {sim_words}", flush=True)
@@ -112,13 +114,16 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
 
         print(flush=True)
 
-    words_in_vocab = []
+    c_word_not_found = 0
     for con in concept_1_list:
         if con in vocab:
             get_similarity_score(con=con)
         else:
+            c_word_not_found += 1
             print(f"Concept not in Vocab : {con}", flush=True)
             print(flush=True)
+
+    print(f"c_word_not_found : {c_word_not_found}")
 
 
 embedding_file = (
