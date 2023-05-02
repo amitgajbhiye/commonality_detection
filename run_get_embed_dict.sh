@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=NBembDICT
 
-#SBATCH --output=logs/out_get_numberbatch_embedding_dict.txt
-#SBATCH --error=logs/err_get_numberbatch_embedding_dict.txt
+#SBATCH --output=logs/out_get_similar_words_numberbatch.txt
+#SBATCH --error=logs/err_get_similar_words_numberbatch.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5

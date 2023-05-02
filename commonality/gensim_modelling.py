@@ -92,19 +92,25 @@ class GloveVectorsGensim:
                         c_hyphen_word_vocab += 1
 
                     else:
-                        # print(f"Word Not Found in Vocab : {word}", flush=True)
+                        print(f"Word Not Found in Vocab : {word}", flush=True)
                         multi_word.append(word)
                         c_multi_word += 1
 
         words = word_vocab + undescore_word_vocab + hyphen_word_vocab
         gv_words = self.glove_model[words]
 
+        print(f"c_word_vocab : {c_word_vocab}")
+        print(f"c_undescore_word_vocab : {c_undescore_word_vocab}")
+        print(f"c_hyphen_word_vocab : {c_hyphen_word_vocab}")
+        print(f"c_multi_word : {c_multi_word}")
+
         from nltk.stem import WordNetLemmatizer
 
         lemmatizer = WordNetLemmatizer()
 
         v_multi_word = np.empty((0, 300), dtype=float)
-        multi_word_vocab = []
+        multi_word_vocab, word_not_found = [], []
+        c_word_not_found = 0
 
         for mword in multi_word:
             splitted_word = mword.split()
@@ -115,6 +121,7 @@ class GloveVectorsGensim:
                     v_multi_word, np.expand_dims(mw_vector, axis=0), axis=0
                 )
                 multi_word_vocab.append(mword)
+                c_multi_word_2 += 1
 
             except KeyError:
                 try:
@@ -126,12 +133,14 @@ class GloveVectorsGensim:
                     )
 
                     multi_word_vocab.append(mword)
+                    c_multi_word_2 += 1
 
                 except KeyError:
-                    print(f"Multiword Not Found : {mword}")
-                    continue
+                    print(f"Word Not Found : {mword}")
+                    word_not_found.append(mword)
+                    c_word_not_found += 1
 
-            c_multi_word_2 += 1
+                    continue
 
         all_words = words + multi_word_vocab
         all_vectors = np.concatenate((gv_words, v_multi_word))
@@ -141,16 +150,17 @@ class GloveVectorsGensim:
 
         assert len(all_words) == all_vectors.shape[0]
 
+        # print(f"word_vocab : {word_vocab}", flush=True)
+        print(f"undescore_word_vocab : {undescore_word_vocab}", flush=True)
+        print(f"hyphen_word_vocab : {hyphen_word_vocab}", flush=True)
+        print(f"multi_word_vocab : {multi_word_vocab}", flush=True)
+        print(f"word_not_found : {c_word_not_found}, {word_not_found}", flush=True)
+
         return all_words, all_vectors
 
 
-def match_multi_words(word1, word2):
-    lemmatizer = WordNetLemmatizer()
-
-    word1 = " ".join([lemmatizer.lemmatize(word) for word in word1.split()])
-    word2 = " ".join([lemmatizer.lemmatize(word) for word in word2.split()])
-
-    return word1 == word2
+def find_most_similar():
+    pass
 
 
 def get_nearest_neighbours(
@@ -182,12 +192,6 @@ def get_nearest_neighbours(
             similar_properties = [property_list[idx] for idx in prop_idx]
 
             log.info(f"{concept} : {similar_properties}")
-
-            # similar_properties = [
-            #     prop
-            #     for prop in similar_properties
-            #     if not match_multi_words(concept, prop)
-            # ]
 
             con_similar_prop_dict[concept] = similar_properties
 
