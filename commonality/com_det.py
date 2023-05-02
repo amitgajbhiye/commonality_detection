@@ -92,25 +92,35 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
     print(vocab, flush=True)
 
     def get_similarity_score(con):
-        sim_scores = vector_model.most_similar(con, topn=None)
+        all_sim_scores = vector_model.most_similar(con, topn=None)
 
-        index_thresh = np.argwhere(sim_scores > sim_thresh).flatten()
+        index_thresh = np.argwhere(all_sim_scores > sim_thresh).flatten()
 
         sim_words = vocab[index_thresh]
-        sim_scores = sim_scores[index_thresh]
+        sim_scores = all_sim_scores[index_thresh]
 
         index_sim_dict = {k: v for k, v in zip(index_thresh, sim_scores)}
-        sorted_index_sim_dict = sorted(
-            index_sim_dict.items(), key=lambda x: x[1], reverse=True
+        sorted_index_sim_dict = dict(
+            sorted(index_sim_dict.items(), key=lambda x: x[1], reverse=True)
         )
+
+        sorted_index = list(sorted_index_sim_dict.keys())
+
+        sim_words = vocab[sorted_index]
+        sim_scores = all_sim_scores[sorted_index]
 
         print(f"Concept : {con}", flush=True)
         print(f"sim_words: {sim_words}", flush=True)
         print(f"sim_scores : {sim_scores}", flush=True)
         print(f"index_thresh : {index_thresh}", flush=True)
-
         print(f"index_sim_dict: {index_sim_dict}", flush=True)
         print(f"sorted_index_sim_dict: {sorted_index_sim_dict}", flush=True)
+
+        sim_words = vocab[sorted_index]
+        sim_scores = all_sim_scores[sorted_index]
+
+        print(f"sorted_sim_words : {sim_words}", flush=True)
+        print(f"sorted_sim_scores : {sim_scores}", flush=True)
 
         print(flush=True)
 
