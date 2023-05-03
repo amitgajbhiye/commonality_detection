@@ -1,10 +1,12 @@
-import numpy as np
+import csv
+import os
 import pickle
 import sys
-import os
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
 from gensim.models import KeyedVectors
-import csv
 
 sys.path.insert(0, os.getcwd())
 sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
@@ -82,6 +84,29 @@ def create_vector_model(fname):
     vector_model = KeyedVectors.load_word2vec_format(fname, binary=False)
 
     return vector_model
+
+
+def create_clusters(concept_similar_list, cluster_thres=None):
+    print(f"Clustering data ....", flush=True)
+    df = pd.DataFrame(
+        concept_similar_list, columns=["concept_1", "concept_2", "sim_score"]
+    )
+    df["counts"] = df.groupby(by=["concept_2"]).transform("count")
+
+    print(f"all_data_shape: {df.shape}", flush=True)
+
+    if cluster_thres:
+        clustered_df = df[df["counts"] >= cluster_thres]
+        clustered_df = df.sort_values(by=["concept_2"])
+        print(f"Clusters are made with a threshold : {cluster_thres}", flush=True)
+
+    else:
+        print(f"No Cluster threshold; All data is used.", flush=True)
+        clustered_df = df.sort_values(by=["concept_2"])
+
+    print(f"clustered_data_shape: {df.shape}", flush=True)
+
+    clustered_df.to_csv("numberbatch_clustered.txt", header=True, index=False)
 
 
 def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
@@ -168,6 +193,8 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
     with open("numberbatch_con_similar.txt", "w") as out_file:
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
+
+    create_clusters(concept_similar_list=all_con_similar_data, cluster_thres=20)
 
 
 embedding_file = (
