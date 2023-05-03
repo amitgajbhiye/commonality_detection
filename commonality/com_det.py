@@ -107,7 +107,7 @@ def create_clusters(concept_similar_list, cluster_thres=None):
     print(f"clustered_data_shape: {df.shape}", flush=True)
 
     clustered_df.to_csv(
-        "numberbatch_clustered_sim_thresh_40.txt", header=True, index=False
+        "numberbatch_clustered_sim_thresh_50.txt", header=True, index=False, sep="\t"
     )
 
 
@@ -197,7 +197,7 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
     print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
     print(f"con_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
 
-    with open("numberbatch_con_similarsim_thresh_40.txt", "w") as out_file:
+    with open("numberbatch_con_similarsim_thresh_50.txt", "w") as out_file:
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
 
@@ -221,5 +221,5 @@ print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 
 get_similar_words(
-    embedding_fname=embedding_file, concept_1_list=concept_1_list, sim_thresh=0.40
+    embedding_fname=embedding_file, concept_1_list=concept_1_list, sim_thresh=0.50
 )
