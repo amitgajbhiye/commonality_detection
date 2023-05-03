@@ -1,9 +1,9 @@
 #!/bin/bash --login
 
-#SBATCH --job-name=NBembDICT
+#SBATCH --job-name=getClusters
 
-#SBATCH --output=logs/out_get_similar_words_numberbatch.txt
-#SBATCH --error=logs/err_get_similar_words_numberbatch.txt
+#SBATCH --output=logs/out_get_similar_words_fasttext.txt
+#SBATCH --error=logs/err_get_similar_words_fasttext.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
