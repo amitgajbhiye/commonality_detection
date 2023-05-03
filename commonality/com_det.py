@@ -194,7 +194,7 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
 
-    create_clusters(concept_similar_list=all_con_similar_data, cluster_thres=20)
+    create_clusters(concept_similar_list=all_con_similar_data, cluster_thres=None)
 
 
 embedding_file = (
