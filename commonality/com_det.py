@@ -117,23 +117,53 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
 
         return sorted_sim_words
 
-    c_word_not_found = 0
+    c_word, c_hyphen_word, c_underscore_word, c_word_not_found = 0, 0, 0, 0
+    vocab_word, hyphen_word, underscore_word, word_not_found = [], [], [], []
 
-    con_not_in_vocab, all_con_similar_data = [], []
+    all_con_similar_data = []
 
     for con in concept_1_list:
+        con_split = con.strip().split()
+        con_len = len(con_split)
+
+        if con_len >= 2:
+            hyphen_con = "-".join(con_split)
+            underscore_con = "_".join(con_split)
+        else:
+            hyphen_con = None
+            underscore_con = None
+
         if con in vocab:
             con_sim_word_score = get_similarity_score(con=con)
             all_con_similar_data.extend(con_sim_word_score)
 
+            c_word = +1
+            vocab_word.append(con)
+
+        elif con_len >= 2 and hyphen_con in vocab:
+            hyphen_con_sim_word_score = get_similarity_score(con=hyphen_con)
+            all_con_similar_data.extend(hyphen_con_sim_word_score)
+
+            c_hyphen_word += 1
+            hyphen_word.append(hyphen_con)
+
+        elif con_len >= 2 and underscore_con in vocab:
+            underscore_con_sim_word_score = get_similarity_score(con=underscore_con)
+            all_con_similar_data.extend(underscore_con_sim_word_score)
+
+            c_underscore_word += 1
+            underscore_word.append(underscore_con)
+
         else:
             c_word_not_found += 1
-            con_not_in_vocab.append(con)
+            word_not_found.append(con)
+
             print(f"Concept not in Vocab : {con}", flush=True)
             print(flush=True)
 
-    print(f"c_word_not_found : {c_word_not_found}")
-    print(f"con_not_in_vocab : {con_not_in_vocab}")
+    print(f"hyphen_word : {c_hyphen_word}, {hyphen_word}", flush=True)
+    print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
+    print(f"con_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
 
     with open("numberbatch_con_similar.txt", "w") as out_file:
         writer = csv.writer(out_file, delimiter="\t")
