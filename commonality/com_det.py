@@ -91,7 +91,7 @@ def create_clusters(concept_similar_list, cluster_thres=None):
     df = pd.DataFrame(
         concept_similar_list, columns=["concept_1", "concept_2", "sim_score"]
     )
-    df["counts"] = df.groupby(by=["concept_2"]).transform("count")
+    df["counts"] = df[[""]].groupby(by=["concept_2"]).transform("count")
 
     print(f"all_data_shape: {df.shape}", flush=True)
 
@@ -190,16 +190,23 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
     print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
     print(f"con_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
 
-    with open("numberbatch_con_similar.txt", "w") as out_file:
+    with open("fasttext_con_similar.txt", "w") as out_file:
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
 
-    create_clusters(concept_similar_list=all_con_similar_data, cluster_thres=None)
+    # create_clusters(concept_similar_list=all_con_similar_data, cluster_thres=None)
+
+
+# conceptnet numberbatch
+# embedding_file = (
+#     "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt"
+# )
 
 
 embedding_file = (
-    "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt"
+    "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
 )
+
 concept_1_file = "datasets/ufet_clean_types.txt"
 
 vector_model = create_vector_model(fname=embedding_file)
