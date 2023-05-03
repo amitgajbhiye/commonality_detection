@@ -112,6 +112,11 @@ def create_clusters(concept_similar_list, cluster_thres=None):
 
 
 def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
+    """
+    get similar props
+
+    """
+
     vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
 
     vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
@@ -192,26 +197,24 @@ def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
     print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
     print(f"con_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
 
-    with open("numberbatch_con_similarsim_thresh_50.txt", "w") as out_file:
+    with open("numberbatch_con_similarsim_thresh_40.txt", "w") as out_file:
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
 
     create_clusters(concept_similar_list=all_con_similar_data, cluster_thres=None)
 
 
+# embedding_file = (
+#     "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
+# )
+
 # conceptnet numberbatch
 embedding_file = (
     "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt"
 )
 
-
-# embedding_file = (
-#     "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
-# )
-
 concept_1_file = "datasets/ufet_clean_types.txt"
 
-vector_model = create_vector_model(fname=embedding_file)
 
 concept_1_list = read_data(file_path=concept_1_file)
 print(f"Num concepts : {len(concept_1_list)}", flush=True)
