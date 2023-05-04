@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from gensim.models import KeyedVectors
+import gensim.downloader as api
 
 sys.path.insert(0, os.getcwd())
 sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
@@ -111,11 +112,18 @@ def create_clusters(concept_similar_list, cluster_thres=None):
     )
 
 
-def get_similar_words(embedding_fname, concept_1_list, sim_thresh):
+def get_similar_words(
+    concept_1_list, sim_thresh, model_name=None, embedding_fname=None
+):
     """
     get similar props
-
     """
+
+    # if model_name == "word2vec":
+    #     print(f"Loading Word2Vec Model : word2vec-google-news-300")
+    #     vector_model = api.load("word2vec-google-news-300", return_path=False)
+    # else:
+    #     vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
 
     vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
 
@@ -221,5 +229,8 @@ print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 
 get_similar_words(
-    embedding_fname=embedding_file, concept_1_list=concept_1_list, sim_thresh=0.50
+    embedding_fname=None,
+    concept_1_list=concept_1_list,
+    sim_thresh=0.50,
+    model_name="word2vec",
 )

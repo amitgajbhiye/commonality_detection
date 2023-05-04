@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=getClusters
 
-#SBATCH --output=logs/out_get_similar_words_fasttext.txt
-#SBATCH --error=logs/err_get_similar_words_fasttext.txt
+#SBATCH --output=logs/out_get_similar_words_word2vec.txt
+#SBATCH --error=logs/err_get_similar_words_word2vec.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
