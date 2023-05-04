@@ -119,13 +119,11 @@ def get_similar_words(
     get similar props
     """
 
-    # if model_name == "word2vec":
-    #     print(f"Loading Word2Vec Model : word2vec-google-news-300")
-    #     vector_model = api.load("word2vec-google-news-300", return_path=False)
-    # else:
-    #     vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
-
-    vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
+    if model_name == "word2vec":
+        print(f"Loading Word2Vec Model : word2vec-google-news-300")
+        vector_model = api.load("word2vec-google-news-300", return_path=False)
+    else:
+        vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
 
     vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
 
