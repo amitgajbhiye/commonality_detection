@@ -112,20 +112,21 @@ def create_clusters(concept_similar_list, output_file_name):
 
 def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
     """
-    Get concepts cosine similar to concept_2
+    Get cosine similar to concepts
     """
 
     if os.path.isfile(embedding_model):
-        print(f"Loading the Embedding Model from the File : {embedding_model}")
+        print(
+            f"Loading the Embedding Model from the File : {embedding_model}", flush=True
+        )
         vector_model = KeyedVectors.load_word2vec_format(embedding_model, binary=False)
     else:
-        print(f"Loading Embedding Model from Gensim")
+        print(f"Loading Embedding Model from Gensim...", flush=True)
         vector_model = api.load("word2vec-google-news-300", return_path=False)
 
     vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
 
     print(f"Vocab Len : {vocab.shape}", flush=True)
-    print(vocab, flush=True)
 
     def get_similarity_score(con=None, multiword=None):
         if con:
@@ -230,14 +231,14 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
             else:
                 c_word_not_found += 1
                 word_not_found.append(con)
-                print(f"concept_not_in_vocab : {con}", flush=True)
+                print(f"single_concept_not_in_vocab : {con}", flush=True)
                 print(flush=True)
 
         else:
             c_word_not_found += 1
             word_not_found.append(con)
 
-            print(f"concept_not_in_vocab : {con}", flush=True)
+            print(f"single_concept_not_in_vocab : {con}", flush=True)
             print(flush=True)
 
     print(f"individual_c_word : {c_word}", flush=True)
@@ -292,6 +293,12 @@ out_fnames = [
 
 
 for emb_file, out_file in zip(embedding_files, out_fnames):
+    print("*" * 60, flush=True)
+    print("new_run", flush=True)
+    print("embedding_file : {emb_file}", flush=True)
+    print("output_file :{out_file}", flush=True)
+    print("*" * 60)
+
     get_similar_words(
         concept_1_list=concept_1_list,
         sim_thresh=similarity_thresh,
