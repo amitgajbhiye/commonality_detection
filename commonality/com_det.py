@@ -302,8 +302,8 @@ out_fnames = [
 for emb_file, out_file in zip(embedding_files, out_fnames):
     print("*" * 60, flush=True)
     print("new_run", flush=True)
-    print("embedding_file : {emb_file}", flush=True)
-    print("output_file :{out_file}", flush=True)
+    print(f"embedding_file : {emb_file}", flush=True)
+    print(f"output_file :{out_file}", flush=True)
     print("*" * 60)
 
     get_similar_words(
