@@ -282,13 +282,13 @@ similarity_thresh = 0.05
 
 embedding_files = [
     "word2vec-google-news-300",
-    "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
-    "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
+    # "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
+    # "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
 ]
 out_fnames = [
     f"output_files/word2vec_ueft_label_similar_{similarity_thresh}thresh.txt",
-    f"output_files/numberbatch_ueft_label_similar_{similarity_thresh}thresh.txt",
-    f"output_files/fasttext_ueft_label_similar_{similarity_thresh}thresh.txt",
+    # f"output_files/numberbatch_ueft_label_similar_{similarity_thresh}thresh.txt",
+    # f"output_files/fasttext_ueft_label_similar_{similarity_thresh}thresh.txt",
 ]
 
 
