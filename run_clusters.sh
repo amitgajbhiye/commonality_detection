@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=getClusters
 
-#SBATCH --output=logs/out_get_similar_words_word2vec.txt
-#SBATCH --error=logs/err_get_similar_words_word2vec.txt
+#SBATCH --output=logs/out_get_similar_multiwords_word2vec.txt
+#SBATCH --error=logs/err_get_similar_multiwords_word2vec.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
@@ -12,7 +12,7 @@
 #SBATCH -p highmem
 #SBATCH --mem=20G
 
-#SBATCH -t 0-03:00:00
+#SBATCH -t 0-02:00:00
 
 ##SBATCH --gres=gpu:1
 

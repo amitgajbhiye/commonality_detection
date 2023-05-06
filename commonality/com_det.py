@@ -120,9 +120,12 @@ def get_similar_words(
     """
 
     if model_name == "word2vec":
+        assert embedding_fname is None
+
         print(f"Loading Word2Vec Model : word2vec-google-news-300")
         vector_model = api.load("word2vec-google-news-300", return_path=False)
     else:
+        assert model_name is None
         vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
 
     vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
@@ -130,12 +133,24 @@ def get_similar_words(
     print(f"Vocab Len : {vocab.shape}", flush=True)
     print(vocab, flush=True)
 
-    def get_similarity_score(con):
-        all_sim_scores = vector_model.most_similar(con, topn=None)
+    def get_similarity_score(con=None, multiword=None):
+        if con:
+            assert multiword is None, "multiword not None"
+            all_sim_scores = vector_model.most_similar(con, topn=None)
+
+        elif multiword:
+            assert con is None, "con not None"
+            multiword_mean_vec = np.mean(
+                np.vstack([vector_model[w] for w in multiword]), axis=0
+            )
+
+            print(f"multiword_mean_vec_shape : {multiword_mean_vec.shape}", flush=True)
+
+            all_sim_scores = vector_model.most_similar(multiword_mean_vec, topn=None)
 
         index_thresh = np.argwhere(all_sim_scores > sim_thresh).flatten()
 
-        sim_words = vocab[index_thresh]
+        # sim_words = vocab[index_thresh]
         sim_scores = all_sim_scores[index_thresh]
 
         index_sim_dict = {k: v for k, v in zip(index_thresh, sim_scores)}
@@ -144,17 +159,31 @@ def get_similar_words(
             index_sim_dict.items(), key=lambda x: x[1], reverse=True
         )
 
-        sorted_sim_words = [
-            (con, vocab[idx], score) for idx, score in sorted_index_sim_dict
-        ]
+        if con:
+            sorted_sim_words = [
+                (con, vocab[idx], score) for idx, score in sorted_index_sim_dict
+            ]
 
-        print(f"Concept : {con}", flush=True)
-        print(f"sorted_sim_words: {sorted_sim_words}", flush=True)
+            print(f"con : {con}", flush=True)
+            print(f"sorted_sim_words: {sorted_sim_words}", flush=True)
+            print(flush=True)
 
-        print(flush=True)
+        elif multiword:
+            multi_word_con = " ".join(multiword)
+            sorted_sim_words = [
+                (multi_word_con, vocab[idx], score)
+                for idx, score in sorted_index_sim_dict
+            ]
+
+            print(f"multi_word_con : {multi_word_con}", flush=True)
+            print(f"sorted_sim_words: {sorted_sim_words}", flush=True)
+            print(flush=True)
 
         return sorted_sim_words
 
+    ########################
+
+    ########################
     c_word, c_hyphen_word, c_underscore_word, c_word_not_found = 0, 0, 0, 0
     vocab_word, hyphen_word, underscore_word, word_not_found = [], [], [], []
 
@@ -193,17 +222,36 @@ def get_similar_words(
             underscore_word.append(underscore_con)
 
         else:
-            c_word_not_found += 1
-            word_not_found.append(con)
+            if con_len >= 2:
+                multi_word = [word for word in con_split if word in vocab]
 
-            print(f"Concept not in Vocab : {con}", flush=True)
-            print(flush=True)
+                if " ".join(multi_word) == con:
+                    print(f"Multiword Concept found : {con}", flush=True)
 
+                    multi_con_sim_word_score = get_similarity_score(
+                        con=None, multiword=multi_word
+                    )
+                    all_con_similar_data.extend(multi_con_sim_word_score)
+
+                else:
+                    c_word_not_found += 1
+                    word_not_found.append(con)
+                    print(f"Concept not in Vocab : {con}", flush=True)
+                    print(flush=True)
+
+            else:
+                c_word_not_found += 1
+                word_not_found.append(con)
+
+                print(f"Concept not in Vocab : {con}", flush=True)
+                print(flush=True)
+
+    print(f"individual_c_word : {c_word}", flush=True)
     print(f"hyphen_word : {c_hyphen_word}, {hyphen_word}", flush=True)
     print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
     print(f"con_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
 
-    with open("word2vec_con_similarsim_thresh_50.txt", "w") as out_file:
+    with open("multiword_word2vec_con_similar_sim_thresh_50.txt", "w") as out_file:
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
 
@@ -227,8 +275,8 @@ print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 
 get_similar_words(
-    embedding_fname=None,
     concept_1_list=concept_1_list,
     sim_thresh=0.50,
+    embedding_fname=None,
     model_name="word2vec",
 )
