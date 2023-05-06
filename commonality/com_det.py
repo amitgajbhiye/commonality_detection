@@ -181,7 +181,9 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
 
     ########################
     c_word, c_hyphen_word, c_underscore_word, c_word_not_found = 0, 0, 0, 0
+    c_multi_word = 0
     vocab_word, hyphen_word, underscore_word, word_not_found = [], [], [], []
+    multi_word_list = []
 
     all_con_similar_data = []
 
@@ -200,7 +202,7 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
             con_sim_word_score = get_similarity_score(con=con)
             all_con_similar_data.extend(con_sim_word_score)
 
-            c_word = +1
+            c_word += 1
             vocab_word.append(con)
 
         elif hyphen_con in vocab:
@@ -228,6 +230,9 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
                 )
                 all_con_similar_data.extend(multi_con_sim_word_score)
 
+                c_multi_word += 1
+                multi_word_list.append(" ".join(multi_word))
+
             else:
                 c_word_not_found += 1
                 word_not_found.append(con)
@@ -247,6 +252,8 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
     print(flush=True)
     print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
     print(flush=True)
+    print(f"multi_word_list : {c_multi_word}, {multi_word_list}", flush=True)
+    print(flush=True)
     print(f"concept_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
     print(flush=True)
 
@@ -262,7 +269,7 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
 
 
 concept_1_file = "datasets/ufet_clean_types.txt"
-concept_1_list = read_data(file_path=concept_1_file)[0:100]
+concept_1_list = read_data(file_path=concept_1_file)[0:200]
 print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 
