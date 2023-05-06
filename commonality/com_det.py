@@ -278,7 +278,7 @@ print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 # embedding_file = "word2vec-google-news-300"
 
-similarity_thresh = 0.05
+similarity_thresh = 0.50
 
 embedding_files = [
     "word2vec-google-news-300",

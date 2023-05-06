@@ -10,7 +10,7 @@
 #SBATCH -A scw1858
 
 #SBATCH -p highmem
-#SBATCH --mem=20G
+#SBATCH --mem=40G
 
 #SBATCH -t 0-02:00:00
 
