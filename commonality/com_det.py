@@ -81,52 +81,46 @@ with open(
 # )
 
 
-def create_vector_model(fname):
-    vector_model = KeyedVectors.load_word2vec_format(fname, binary=False)
+def clean_text(word):
+    t = word.strip().replace("_", " ")
 
-    return vector_model
+    return t
 
 
-def create_clusters(concept_similar_list, cluster_thres=None):
+def create_clusters(concept_similar_list, output_file_name):
     print(f"Clustering data ....", flush=True)
     df = pd.DataFrame(
         concept_similar_list, columns=["concept_1", "concept_2", "sim_score"]
     )
-    # df["counts"] = df.groupby(by=["concept_2"]).transform("count")
 
-    print(f"all_data_shape: {df.shape}", flush=True)
+    print(f"input_shape: {df.shape}", flush=True)
 
-    if cluster_thres:
-        clustered_df = df[df["counts"] >= cluster_thres]
-        clustered_df = df.sort_values(by=["concept_2"])
-        print(f"Clusters are made with a threshold : {cluster_thres}", flush=True)
+    con12_df = df[["concept_1", "concept_2"]]
+    df["concept_2_counts"] = con12_df.groupby(by=["concept_2"]).transform("count")
 
-    else:
-        print(f"No Cluster threshold; All data is used.", flush=True)
-        clustered_df = df.sort_values(by=["concept_2"])
+    print(f"df_shape: {df.shape}", flush=True)
+
+    df = df.sort_values(by=["concept_2"], inplace=False)
 
     print(f"clustered_data_shape: {df.shape}", flush=True)
 
-    clustered_df.to_csv(
-        "word2vec_clustered_sim_thresh_50.txt", header=True, index=False, sep="\t"
-    )
+    df["concept_1"] = df["concept_1"].apply(clean_text)
+    df["concept_2"] = df["concept_2"].apply(clean_text)
+
+    df.to_csv(output_file_name, header=True, index=False, sep="\t")
 
 
-def get_similar_words(
-    concept_1_list, sim_thresh, model_name=None, embedding_fname=None
-):
+def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
     """
-    get similar props
+    Get concepts cosine similar to concept_2
     """
 
-    if model_name == "word2vec":
-        assert embedding_fname is None
-
-        print(f"Loading Word2Vec Model : word2vec-google-news-300")
-        vector_model = api.load("word2vec-google-news-300", return_path=False)
+    if os.path.isfile(embedding_model):
+        print(f"Loading the Embedding Model from the File : {embedding_model}")
+        vector_model = KeyedVectors.load_word2vec_format(embedding_model, binary=False)
     else:
-        assert model_name is None
-        vector_model = KeyedVectors.load_word2vec_format(embedding_fname, binary=False)
+        print(f"Loading Embedding Model from Gensim")
+        vector_model = api.load("word2vec-google-news-300", return_path=False)
 
     vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
 
@@ -150,10 +144,11 @@ def get_similar_words(
 
         index_thresh = np.argwhere(all_sim_scores > sim_thresh).flatten()
 
-        # sim_words = vocab[index_thresh]
         sim_scores = all_sim_scores[index_thresh]
 
-        index_sim_dict = {k: v for k, v in zip(index_thresh, sim_scores)}
+        index_sim_dict = {
+            idx: sim_score for idx, sim_score in zip(index_thresh, sim_scores)
+        }
 
         sorted_index_sim_dict = sorted(
             index_sim_dict.items(), key=lambda x: x[1], reverse=True
@@ -207,76 +202,99 @@ def get_similar_words(
             c_word = +1
             vocab_word.append(con)
 
-        elif con_len >= 2 and hyphen_con in vocab:
+        elif hyphen_con in vocab:
             hyphen_con_sim_word_score = get_similarity_score(con=hyphen_con)
             all_con_similar_data.extend(hyphen_con_sim_word_score)
 
             c_hyphen_word += 1
             hyphen_word.append(hyphen_con)
 
-        elif con_len >= 2 and underscore_con in vocab:
+        elif underscore_con in vocab:
             underscore_con_sim_word_score = get_similarity_score(con=underscore_con)
             all_con_similar_data.extend(underscore_con_sim_word_score)
 
             c_underscore_word += 1
             underscore_word.append(underscore_con)
 
-        else:
-            if con_len >= 2:
-                multi_word = [word for word in con_split if word in vocab]
+        elif con_len >= 2:
+            multi_word = [word for word in con_split if word in vocab]
 
-                if " ".join(multi_word) == con:
-                    print(f"Multiword Concept found : {con}", flush=True)
+            if " ".join(multi_word) == con:
+                print(f"multiword_concept_found : {con}", flush=True)
 
-                    multi_con_sim_word_score = get_similarity_score(
-                        con=None, multiword=multi_word
-                    )
-                    all_con_similar_data.extend(multi_con_sim_word_score)
-
-                else:
-                    c_word_not_found += 1
-                    word_not_found.append(con)
-                    print(f"Concept not in Vocab : {con}", flush=True)
-                    print(flush=True)
+                multi_con_sim_word_score = get_similarity_score(
+                    con=None, multiword=multi_word
+                )
+                all_con_similar_data.extend(multi_con_sim_word_score)
 
             else:
                 c_word_not_found += 1
                 word_not_found.append(con)
-
-                print(f"Concept not in Vocab : {con}", flush=True)
+                print(f"concept_not_in_vocab : {con}", flush=True)
                 print(flush=True)
 
-    print(f"individual_c_word : {c_word}", flush=True)
-    print(f"hyphen_word : {c_hyphen_word}, {hyphen_word}", flush=True)
-    print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
-    print(f"con_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
+        else:
+            c_word_not_found += 1
+            word_not_found.append(con)
 
-    with open("multiword_word2vec_con_similar_sim_thresh_50.txt", "w") as out_file:
+            print(f"concept_not_in_vocab : {con}", flush=True)
+            print(flush=True)
+
+    print(f"individual_c_word : {c_word}", flush=True)
+    print(flush=True)
+    print(f"hyphen_word : {c_hyphen_word}, {hyphen_word}", flush=True)
+    print(flush=True)
+    print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
+    print(flush=True)
+    print(f"concept_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
+    print(flush=True)
+
+    with open(out_fname, "w") as out_file:
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
 
-    create_clusters(concept_similar_list=all_con_similar_data, cluster_thres=None)
+    clustered_fname = f"{os.path.splitext(out_fname)[0]}_clustered.txt"
+
+    create_clusters(
+        concept_similar_list=all_con_similar_data, output_file_name=clustered_fname
+    )
+
+
+concept_1_file = "datasets/ufet_clean_types.txt"
+concept_1_list = read_data(file_path=concept_1_file)[0:100]
+print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 
 # Fasttext Embeddings
-embedding_file = (
-    "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
-)
+# embedding_file = (
+#     "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
+# )
 
 # conceptnet numberbatch embeddings
 # embedding_file = (
 #     "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt"
 # )
 
-concept_1_file = "datasets/ufet_clean_types.txt"
-concept_1_list = read_data(file_path=concept_1_file)
+# embedding_file = "word2vec-google-news-300"
 
-print(f"Num concepts : {len(concept_1_list)}", flush=True)
+similarity_thresh = 0.05
+
+embedding_files = [
+    "word2vec-google-news-300",
+    "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
+    "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
+]
+out_fnames = [
+    f"output_files/word2vec_ueft_label_similar_{similarity_thresh}thresh.txt",
+    f"output_files/numberbatch_ueft_label_similar_{similarity_thresh}thresh.txt",
+    f"output_files/fasttext_ueft_label_similar_{similarity_thresh}thresh.txt",
+]
 
 
-get_similar_words(
-    concept_1_list=concept_1_list,
-    sim_thresh=0.50,
-    embedding_fname=None,
-    model_name="word2vec",
-)
+for emb_file, out_file in zip(embedding_files, out_fnames):
+    get_similar_words(
+        concept_1_list=concept_1_list,
+        sim_thresh=similarity_thresh,
+        embedding_model=emb_file,
+        out_fname=out_file,
+    )

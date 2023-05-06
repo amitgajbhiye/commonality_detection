@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=getClusters
 
-#SBATCH --output=logs/out_get_similar_multiwords_word2vec.txt
-#SBATCH --error=logs/err_get_similar_multiwords_word2vec.txt
+#SBATCH --output=logs/out_dummy.txt
+#SBATCH --error=logs/err_dummy.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
