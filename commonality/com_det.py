@@ -269,7 +269,7 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
 
 
 concept_1_file = "datasets/ufet_clean_types.txt"
-concept_1_list = read_data(file_path=concept_1_file)[0:200]
+concept_1_list = read_data(file_path=concept_1_file)
 print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
 
@@ -289,13 +289,13 @@ similarity_thresh = 0.50
 
 embedding_files = [
     "word2vec-google-news-300",
-    # "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
-    # "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
+    "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
+    "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
 ]
 out_fnames = [
     f"output_files/word2vec_ueft_label_similar_{similarity_thresh}thresh.txt",
-    # f"output_files/numberbatch_ueft_label_similar_{similarity_thresh}thresh.txt",
-    # f"output_files/fasttext_ueft_label_similar_{similarity_thresh}thresh.txt",
+    f"output_files/numberbatch_ueft_label_similar_{similarity_thresh}thresh.txt",
+    f"output_files/fasttext_ueft_label_similar_{similarity_thresh}thresh.txt",
 ]
 
 
