@@ -1,6 +1,4 @@
-import csv
 import os
-import pickle
 import sys
 from pathlib import Path
 from glob import glob
@@ -163,6 +161,8 @@ def get_cosine_similar_words(
 
     with open(outfile, "w") as f:
         for idx, sim_scores in enumerate(sim_array):
+            print(f"Processing Concept {idx} / {sim_array.shape[0]}", flush=True)
+
             index_thresh = np.argwhere(sim_scores > sim_thresh).flatten()
             concept1_similar_to_concept2 = concept_1_in_vocab[index_thresh]
 
@@ -180,8 +180,8 @@ def read_relbert_filetered_file(inpfile):
     print(f"in read_relbert_filetered_file function", flush=True)
     df = pd.read_csv(inpfile, sep="\t", names=["concept_1", "concept_2", "rel_score"])
 
-    concept_1 = df["concept_1"].unique()[0:500]
-    concept_2 = df["concept_2"].unique()[0:700]
+    concept_1 = df["concept_1"].unique()
+    concept_2 = df["concept_2"].unique()
 
     print(f"num_concept_1: {concept_1.shape[0]} concept_1: {concept_1}", flush=True)
     print(f"num_concept_2: {concept_2.shape[0]} concept_2: {concept_2}", flush=True)
