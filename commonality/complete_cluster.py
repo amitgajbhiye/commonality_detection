@@ -133,8 +133,9 @@ def get_words_in_vocab_and_vecs(concept_list, embedding_model):
     all_words_in_vocab = vocab_word + hyphen_word + underscore_word
 
     print(f"all_words_in_vocab : {len(all_words_in_vocab)}", flush=True)
-    print(f"multi_words : {len(multi_word_list)}", flush=True)
+    print(f"multi_words : {len(multi_word_list)}", flush=True, end="\n")
 
+    # Getting the Embedding for words
     all_words, vecs_all_words = get_word_vectors(
         embedding_model=vector_model,
         word_in_vocab=all_words_in_vocab,
@@ -152,13 +153,13 @@ def get_cosine_similar_words(
     outfile,
     sim_thresh=0.5,
 ):
-    print(f"in get_cosine_similar_words function")
+    print(f"in get_cosine_similar_words function", flush=True, end="\n")
 
     sim_array = cosine_similarity(vecs_concept_2, vecs_concept_1)
 
     print(f"vecs_concept_1_shape : {vecs_concept_1.shape}", flush=True)
     print(f"vecs_concept_2_shape : {vecs_concept_2.shape}", flush=True)
-    print(f"sim_array_shape : {sim_array.shape}", flush=True)
+    print(f"sim_array_shape : {sim_array.shape}", flush=True, end="\n")
 
     with open(outfile, "w") as f:
         for idx, sim_scores in enumerate(sim_array):
@@ -180,7 +181,7 @@ def read_relbert_filetered_file(inpfile):
     df = pd.read_csv(inpfile, sep="\t", names=["concept_1", "concept_2", "rel_score"])
 
     concept_1 = df["concept_1"].unique()[0:500]
-    concept_2 = df["concept_2"].unique()[0:500]
+    concept_2 = df["concept_2"].unique()[0:700]
 
     print(f"num_concept_1: {concept_1.shape[0]} concept_1: {concept_1}", flush=True)
     print(f"num_concept_2: {concept_2.shape[0]} concept_2: {concept_2}", flush=True)
@@ -210,7 +211,8 @@ if __name__ == "__main__":
     for inpfile, embed_model_file, outfile in zip(
         relbert_filtered_files, embedding_model_files, out_complementary_clusters_file
     ):
-        print(f"*" * 50, flush=True, end="\n")
+        print(f"*" * 50, flush=True)
+        print(f"new_run", flush=True)
         print(f"relbert_filtered_file : {inpfile}", flush=True)
         print(f"embedding_model_file : {embed_model_file}", flush=True)
         print(f"out_complementary_clusters_file : {outfile}", flush=True)
