@@ -28,9 +28,9 @@ def get_word_vectors(
 
     vecs_multi_words = []
     for word in multi_words:
-        # multiword_mean_vec = np.empty_like(vecs_word_in_vocab[0])
+        print(f"multiword_get_vector : {word}", flush=True)
         multiword_mean_vec = np.mean(
-            np.vstack([embedding_model[w] for w in word]), axis=0
+            np.vstack([embedding_model[w] for w in word.split()]), axis=0
         )
 
         vecs_multi_words.append(multiword_mean_vec)
@@ -176,13 +176,13 @@ def read_relbert_filetered_file(inpfile):
     print(f"in read_relbert_filetered_file function", flush=True)
     df = pd.read_csv(inpfile, sep="\t", names=["concept_1", "concept_2", "rel_score"])
 
-    concept_1 = df["concept_1"].unique()
-    concept_2 = df["concept_2"].unique()
+    concept_1 = df["concept_1"].unique()[0:500]
+    concept_2 = df["concept_2"].unique()[0:500]
 
     print(f"num_concept_1: {concept_1.shape[0]} concept_1: {concept_1}", flush=True)
     print(f"num_concept_2: {concept_2.shape[0]} concept_2: {concept_2}", flush=True)
 
-    return concept_1[0:500], concept_2[0:500]
+    return concept_1, concept_2
 
 
 if __name__ == "__main__":
