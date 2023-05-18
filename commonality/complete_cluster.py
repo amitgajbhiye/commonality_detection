@@ -19,16 +19,16 @@ sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
 def get_word_vectors(
     embedding_model,
     word_in_vocab,
-    multi_words,
+    multi_words=None,
 ):
     print(f"in get_word_vectors function", flush=True)
     vecs_word_in_vocab = embedding_model[word_in_vocab]
 
-    print(f"vecs_word_in_vocab[0].shape : {vecs_word_in_vocab[0].shape}")
-
-    vecs_multi_words = []
+    print(f"word_in_vocab : {len(word_in_vocab)}", flush=True)
+    print(f"vecs_word_in_vocab : {vecs_word_in_vocab.shape}", flush=True)
 
     if multi_words:
+        vecs_multi_words = []
         for word in multi_words:
             print(f"multiword_get_vector : {word}", flush=True)
             multiword_mean_vec = np.mean(
@@ -37,20 +37,20 @@ def get_word_vectors(
 
             vecs_multi_words.append(multiword_mean_vec)
 
-    vecs_multi_words = np.vstack(vecs_multi_words)
+        vecs_multi_words = np.vstack(vecs_multi_words)
 
-    print(f"word_in_vocab : {len(word_in_vocab)}", flush=True)
-    print(f"vecs_word_in_vocab : {vecs_word_in_vocab.shape}", flush=True)
-    print(f"multi_words : {len(multi_words)}", flush=True)
-    print(f"vecs_multi_words : {vecs_multi_words.shape}", flush=True)
+        print(f"multi_words : {len(multi_words)}", flush=True)
+        print(f"vecs_multi_words : {vecs_multi_words.shape}", flush=True)
 
-    all_words = np.array(word_in_vocab + multi_words)
-    vecs_all_words = np.vstack((vecs_word_in_vocab, vecs_multi_words))
+        all_words = np.array(word_in_vocab + multi_words)
+        vecs_all_words = np.vstack((vecs_word_in_vocab, vecs_multi_words))
+
+    else:
+        all_words = np.array(word_in_vocab)
+        vecs_all_words = vecs_word_in_vocab
 
     print(f"all_words : {len(all_words)}", flush=True)
-    print(f"vecs_all_words : {vecs_all_words.shape}", flush=True)
-
-    print(flush=True)
+    print(f"vecs_all_words : {vecs_all_words.shape}", flush=True, end="\n")
 
     return (all_words, vecs_all_words)
 
@@ -65,7 +65,7 @@ def get_words_in_vocab_and_vecs(concept_list, embedding_model):
         print(f"Loading Embedding Model from Gensim...", flush=True)
         vector_model = api.load(embedding_model, return_path=False)
 
-    vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
+    vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)  # type: ignore
     print(f"Vocab Len : {vocab.shape}", flush=True)
 
     c_word, c_hyphen_word, c_underscore_word, c_word_not_found = 0, 0, 0, 0
