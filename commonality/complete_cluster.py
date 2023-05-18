@@ -27,13 +27,15 @@ def get_word_vectors(
     print(f"vecs_word_in_vocab[0].shape : {vecs_word_in_vocab[0].shape}")
 
     vecs_multi_words = []
-    for word in multi_words:
-        print(f"multiword_get_vector : {word}", flush=True)
-        multiword_mean_vec = np.mean(
-            np.vstack([embedding_model[w] for w in word.split()]), axis=0
-        )
 
-        vecs_multi_words.append(multiword_mean_vec)
+    if multi_words:
+        for word in multi_words:
+            print(f"multiword_get_vector : {word}", flush=True)
+            multiword_mean_vec = np.mean(
+                np.vstack([embedding_model[w] for w in word.split()]), axis=0
+            )
+
+            vecs_multi_words.append(multiword_mean_vec)
 
     vecs_multi_words = np.vstack(vecs_multi_words)
 
