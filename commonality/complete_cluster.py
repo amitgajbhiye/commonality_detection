@@ -24,8 +24,11 @@ def get_word_vectors(
     print(f"in get_word_vectors function", flush=True)
     vecs_word_in_vocab = embedding_model[word_in_vocab]
 
+    print(f"vecs_word_in_vocab[0].shape : {vecs_word_in_vocab[0].shape}")
+
     vecs_multi_words = []
     for word in multi_words:
+        # multiword_mean_vec = np.empty_like(vecs_word_in_vocab[0])
         multiword_mean_vec = np.mean(
             np.vstack([embedding_model[w] for w in word]), axis=0
         )
@@ -51,10 +54,6 @@ def get_word_vectors(
 
 
 def get_words_in_vocab_and_vecs(concept_list, embedding_model):
-    """
-    Get cosine similar to concepts
-    """
-
     if os.path.isfile(embedding_model):
         print(
             f"Loading the Embedding Model from the File : {embedding_model}", flush=True
@@ -62,7 +61,7 @@ def get_words_in_vocab_and_vecs(concept_list, embedding_model):
         vector_model = KeyedVectors.load_word2vec_format(embedding_model, binary=False)
     else:
         print(f"Loading Embedding Model from Gensim...", flush=True)
-        vector_model = api.load("word2vec-google-news-300", return_path=False)
+        vector_model = api.load(embedding_model, return_path=False)
 
     vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)
     print(f"Vocab Len : {vocab.shape}", flush=True)
@@ -98,7 +97,7 @@ def get_words_in_vocab_and_vecs(concept_list, embedding_model):
         elif con_len >= 2:
             multi_word = [word for word in con_split if word in vocab]
 
-            if " ".join(multi_word) == con:
+            if " ".join(multi_word).strip() == " ".join(con_split).strip():
                 print(f"multiword_concept_found : {con}", flush=True)
 
                 c_multi_word += 1
@@ -107,7 +106,7 @@ def get_words_in_vocab_and_vecs(concept_list, embedding_model):
             else:
                 c_word_not_found += 1
                 word_not_found.append(con)
-                print(f"single_concept_not_in_vocab : {con}", flush=True)
+                print(f"multiword_concept_not_in_vocab : {con}", flush=True)
                 print(flush=True)
 
         else:
@@ -183,7 +182,7 @@ def read_relbert_filetered_file(inpfile):
     print(f"num_concept_1: {concept_1.shape[0]} concept_1: {concept_1}", flush=True)
     print(f"num_concept_2: {concept_2.shape[0]} concept_2: {concept_2}", flush=True)
 
-    return concept_1, concept_2
+    return concept_1[0:500], concept_2[0:500]
 
 
 if __name__ == "__main__":
@@ -205,9 +204,8 @@ if __name__ == "__main__":
         # f"output_files/complementary_clusters_files/fasttext_complementary_clusters.txt",
     ]
 
-    for inpfile, embed_model_file in zip(
-        relbert_filtered_files,
-        embedding_model_files,
+    for inpfile, embed_model_file, outfile in zip(
+        relbert_filtered_files, embedding_model_files, out_complementary_clusters_file
     ):
         concept_1, concept_2 = read_relbert_filetered_file(inpfile=inpfile)
 
@@ -219,10 +217,10 @@ if __name__ == "__main__":
         )
 
         get_cosine_similar_words(
-            concept_1_in_vocab,
-            vecs_concept_1,
-            concept_2_in_vocab,
-            vecs_concept_2,
-            out_complementary_clusters_file,
+            concept_1_in_vocab=concept_1_in_vocab,
+            vecs_concept_1=vecs_concept_1,
+            concept_2_in_vocab=concept_2_in_vocab,
+            vecs_concept_2=vecs_concept_2,
+            outfile=outfile,
             sim_thresh=0.50,
         )
