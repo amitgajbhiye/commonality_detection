@@ -66,7 +66,7 @@ def get_words_in_vocab_and_vecs(concept_list, embedding_model):
         vector_model = api.load(embedding_model, return_path=False)
 
     vocab = np.array(list(vector_model.key_to_index.keys()), dtype=str)  # type: ignore
-    print(f"Vocab Len : {vocab.shape}", flush=True)
+    print(f"vocab_len: {vocab.shape}", flush=True)
 
     c_word, c_hyphen_word, c_underscore_word, c_word_not_found = 0, 0, 0, 0
     c_multi_word = 0
@@ -109,25 +109,26 @@ def get_words_in_vocab_and_vecs(concept_list, embedding_model):
                 c_word_not_found += 1
                 word_not_found.append(con)
                 print(f"multiword_concept_not_in_vocab : {con}", flush=True)
-                print(flush=True)
 
         else:
             c_word_not_found += 1
             word_not_found.append(con)
 
-            print(f"single_concept_not_in_vocab : {con}", flush=True)
-            print(flush=True)
+            print(f"single_concept_not_in_vocab : {con}", flush=True, end="\n")
 
-    print(f"individual_c_word : {c_word}", flush=True)
-    print(flush=True)
-    print(f"hyphen_word : {c_hyphen_word}, {hyphen_word}", flush=True)
-    print(flush=True)
-    print(f"underscore_word : {c_underscore_word}, {underscore_word}", flush=True)
-    print(flush=True)
-    print(f"multi_word_list : {c_multi_word}, {multi_word_list}", flush=True)
-    print(flush=True)
-    print(f"concept_not_in_vocab : {c_word_not_found}, {word_not_found}", flush=True)
-    print(flush=True)
+    print(f"individual_c_word : {c_word}", flush=True, end="\n")
+    print(f"hyphen_word : {c_hyphen_word}, {hyphen_word}", flush=True, end="\n")
+    print(
+        f"underscore_word : {c_underscore_word}, {underscore_word}",
+        flush=True,
+        end="\n",
+    )
+    print(f"multi_word_list : {c_multi_word}, {multi_word_list}", flush=True, end="\n")
+    print(
+        f"concept_not_in_vocab : {c_word_not_found}, {word_not_found}",
+        flush=True,
+        end="\n",
+    )
 
     all_words_in_vocab = vocab_word + hyphen_word + underscore_word
 
@@ -190,25 +191,31 @@ def read_relbert_filetered_file(inpfile):
 if __name__ == "__main__":
     relbert_filtered_files = [
         "output_files/relbert_filtered/word2vec_relbert_filetered.txt",
-        # "output_files/relbert_filtered/numberbatch_relbert_filetered.txt",
-        # "output_files/relbert_filtered/fasttext_relbert_filetered.txt",
+        "output_files/relbert_filtered/numberbatch_relbert_filetered.txt",
+        "output_files/relbert_filtered/fasttext_relbert_filetered.txt",
     ]
 
     embedding_model_files = [
         "word2vec-google-news-300",
-        # "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
-        # "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
+        "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
+        "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
     ]
 
     out_complementary_clusters_file = [
         f"output_files/complementary_clusters_files/word2vec_complementary_clusters.txt",
-        # f"output_files/complementary_clusters_files/numberbatch_complementary_clusters.txt",
-        # f"output_files/complementary_clusters_files/fasttext_complementary_clusters.txt",
+        f"output_files/complementary_clusters_files/numberbatch_complementary_clusters.txt",
+        f"output_files/complementary_clusters_files/fasttext_complementary_clusters.txt",
     ]
 
     for inpfile, embed_model_file, outfile in zip(
         relbert_filtered_files, embedding_model_files, out_complementary_clusters_file
     ):
+        print(f"*" * 50, flush=True, end="\n")
+        print(f"relbert_filtered_file : {inpfile}", flush=True)
+        print(f"embedding_model_file : {embed_model_file}", flush=True)
+        print(f"out_complementary_clusters_file : {outfile}", flush=True)
+        print(f"*" * 50, flush=True, end="\n")
+
         concept_1, concept_2 = read_relbert_filetered_file(inpfile=inpfile)
 
         concept_1_in_vocab, vecs_concept_1 = get_words_in_vocab_and_vecs(
