@@ -310,18 +310,24 @@ if __name__ == "__main__":
     if exp_name == "classi_vocab":
         if dataset == "babelnet":
             concept1_file_list = [
-                "datasets/classification_vocabs/BabelnetDomain.txt",
-                "output_files/classification_vocabs/bablenet_domain",
+                (
+                    "datasets/classification_vocabs/BabelnetDomain.txt",
+                    "output_files/classification_vocabs/bablenet_domain",
+                )
             ]
         elif dataset == "wordnet":
             concept1_file_list = [
-                "datasets/classification_vocabs/WordNet.txt",
-                "output_files/classification_vocabs/wordnet",
+                (
+                    "datasets/classification_vocabs/WordNet.txt",
+                    "output_files/classification_vocabs/wordnet",
+                )
             ]
         elif dataset == "xmcrae":
             concept1_file_list = [
-                "datasets/classification_vocabs/X-McRae.txt",
-                "output_files/classification_vocabs/xmcrae",
+                (
+                    "datasets/classification_vocabs/X-McRae.txt",
+                    "output_files/classification_vocabs/xmcrae",
+                )
             ]
         else:
             raise Exception(f"Specify dataset from: babelnet, wordnet, xmcrae")
