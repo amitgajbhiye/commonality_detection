@@ -12,10 +12,10 @@
 #SBATCH -p compute
 #SBATCH --mem=25G
 
-#SBATCH -t 3-00:00:00
+#SBATCH -t 0-02:00:00
 
 conda activate venv
 
-python3 commonality/com_det.py
+python3 commonality/com_det.py classi_vocab
 
 echo 'Job Finished !!!'
