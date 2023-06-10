@@ -364,6 +364,7 @@ if __name__ == "__main__":
                     out_fname=out_file,
                 )
     elif exp_name == "ontology_comp":
+        #### This portion is not complete yet
         concept1_file_list = [
             (
                 "datasets/ontology_completion/economy-1_split.txt",
