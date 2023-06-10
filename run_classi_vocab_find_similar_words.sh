@@ -9,7 +9,7 @@
 #SBATCH --ntasks=5
 #SBATCH -A scw1858
 
-#SBATCH -p compute
+#SBATCH -p highmen
 #SBATCH --mem=40G
 
 #SBATCH -t 3-00:00:00
