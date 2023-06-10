@@ -1,0 +1,135 @@
+Ylang Ylang
+Wearable Item
+Food Product
+Yam Tuber
+Forest Product
+Hoofed Mammal
+Cereal Grass
+Cooking Range
+Currency Measure
+Ornamental Fish
+Flowering Plant
+Chemical Product
+Millet Grain
+Water Buffalo
+Senepol Cattle
+Compound Substance
+Reproductive Body
+Lead Ore
+Fish Roe
+Flax Fiber
+Maize Grain
+Wheat Grain
+Macademia Nut
+Shea Nut
+Precious Gemstone
+Tea Leaf
+Barley Grain
+Fish Product
+Cereal Grain
+British Pound
+Corn
+German Mark
+Semiprecious Gemstone
+Chicken Meat
+French Franc
+Lead Product
+Black Pepper
+Wood Product
+Electric Device
+Zinc Product
+Cotton Fiber
+Capital Good
+Handicraft Product
+Japanese Yen
+Petroleum Product
+Rice Grain
+Financial Transaction
+Balsa Wood
+Sisal Fiber
+Pecan Nut
+Potato Tuber
+Major Appliance
+Afghan Afghani
+Metal Product
+Iron Ore
+Cocoa Bean
+Industrial Supply
+Dairy Product
+Tropical Fruit
+Zinc Ore
+Hemp Fiber
+Food Egg
+Change Of Possession
+Pharmaceutical Product
+Oilseed
+Economic Development Level
+Lead Metal
+Fruit Or Vegetable
+Sugar Cane
+Durable Good
+Rye Grain
+Almond Nut
+Italian Lire
+Cardamom
+Industry Attribute
+Jute Fiber
+Copper Ore
+Crop Production
+Turkey
+Mining Product
+Manufactured Product
+Cow Pea
+Tajik Somoni
+Green Pepper
+Vegetable Oil
+Turkey Meat
+Forage Crop
+Wool Fiber
+Beverage Product
+Okoume
+Date Fruit
+Animal Skin
+Palm Kernel
+Sorghum Grain
+Passion Fruit
+Natural Rubber
+Cashew Nut
+Textile Product
+Diesel Fuel
+Soya
+Economic Sector
+Controlled Substance
+Cut Flower
+Aluminum Metal
+Khat
+Citrus Fruit
+Guernsey Cattle
+Taro Tuber
+Sweet Pepper
+Root Vegetable
+Motor Oil
+Root Starch
+Edible Tuber
+Relational Attribute
+Perfume Essence
+Alumina
+Phosphoric Acid
+Product Package
+Nickel Ore
+Grocery Produce
+Organic Object
+Mulberry Leaf
+Agricultural Product
+Oat Grain
+Spice Pepper
+Anatomical Structure
+Paddy Rice
+Kentia Palm Seed
+Lamb Meat
+Power Generation
+Economic Attribute
+Petroleum Lubricant
+Euro Dollar
+Edible Nut
+Food Fish

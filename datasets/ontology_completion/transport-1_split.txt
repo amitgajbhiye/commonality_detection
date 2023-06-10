@@ -1,0 +1,222 @@
+Railroad Company
+Railway Vehicle
+Body Motion
+Pier
+Chemical Tanker Ship
+Dining Car
+Railway Junction
+Flight Deck
+Spine Car
+Tractor Trailer
+Crew List
+Ship Hold
+Radar Or Sonar
+Air Traffic Control Tower
+Fishing Boat
+Contract Carrier
+Airport Classification
+Crane Ship
+Arriving
+Multiple Track Railway
+Water Transportation System
+Common Carrier
+Containerization
+Flatcar
+Electric Device
+Container Terminal
+Petroleum Product
+Ore Carrier Ship
+Set Or Class
+Ship Berthing
+Transportation Authority
+Cargo Handling
+General Cargo Ship
+Volume Measure
+Glider Airplane
+Intentional Process
+Train Assembly
+Partial Container Ship
+Regulatory Process
+Emergency Vehicle
+Traffic Signal
+Ship Deck
+Propeller Airplane
+Watercraft
+Land Area
+Emergency Road Vehicle
+Taking Off
+Navigation
+Minivan
+Ship Cabin
+Offshore Support Ship
+Vehicle Wheel
+Traffic Control Process
+Major Air Carrier
+Air Route
+Deepwater Port
+Railcar Carrier Ship
+Freight Car
+Cubic Foot
+Rolling Stock
+Ship Berth
+Land Vehicle
+Navigation Buoy
+Tank Car
+Railroad Bridge
+Radio Navigation Beacon
+Merchant Marine
+Cabotage
+Aid To Navigation
+Portable Bridge
+Canal Structure
+Cable Ship
+Transit Shelter
+Hangar Bay
+Cab Car
+Fire Engine
+Fishing Vessel
+Rocket Engine
+Refrigerated Compartment
+Attaching
+Standard Gauge Railway
+Diesel Fuel
+Research Ship
+Hopper Dredger
+Vehicle Registration
+Ship Hull
+Animal Powered Vehicle
+Etiologic Agent
+Track Gauge
+Registry Ton
+Commercial Shipping
+Road Vehicle
+Petroleum Pipeline
+Cargo Manifest
+Government Organization
+Personal Watercraft
+Bill Of Lading
+Ship Agent
+Commercial Airport
+Long Ton
+Bulk Cargo
+Tugboat
+Cargo Container
+Unpaved Runway
+Ocean Liner
+Port City
+Transit Route
+Pusher Tug
+Port Facility
+Dual Gauge Railway
+Commercial Agent
+Canal System
+Private Railcar
+Head End Car
+Electrified Railway
+Mass Measure
+Paved Runway
+Petroleum Product Pipeline
+Flight Schedule
+Fixed Bridge
+Turbojet Engine
+Whaling Ship
+Guiding
+Bulkhead
+Deck Crane
+Electronic Signalling
+Sea Lane
+Canal Lock Gate
+Signalling
+Port Crane
+River Port
+Military Watercraft
+Vehicle Crew
+Moving Violation
+Radar Facility
+Electric Motor
+Broad Gauge Railway
+Lighter
+Material Handling Equipment
+Gallery Car
+Light Fixture
+Water Area
+Fish Factory Ship
+Canal Lock
+Transit Stop
+Road Transportation System
+Dangerous Goods
+Ship Compartment
+Transit Terminal
+Waterway Junction
+Organizational Process
+Truck Tractor
+Traffic Light
+Rail Transportation System
+Railroad Track
+Passenger Ship
+Deck Cargo
+Jet Engine
+Freighter
+Hoisting Device
+Scale Test Car
+Outfit Car
+Mode Of Transit
+Single Traffic Lane
+Light Truck
+Port Embargo
+Container Ship
+Train Station
+Electrical Signalling
+Cargo Ship
+Intermodal Transportation
+Coach Railcar
+Terminal Building
+Commercial Carrier
+Department Of Transportation
+Vehicle Carrier Ship
+Transportation System
+Transitway
+Petroleum Tanker Ship
+Local Transit System
+Drilling Ship
+Full Size Van
+Maritime Blockade
+Dry Bulk Cargo
+Shipping Channel
+Transportation Device
+Motor Scooter
+Fishing Trawler
+Navigation Light
+Transportation Schedule
+Managing
+Turboprop Airplane
+Jet Airplane
+Organic Compound
+Atmospheric Region
+Road Junction
+Passenger Car
+Air Traffic Control Procedure
+Keeping
+Air Traffic Control Center
+Ship Hatch
+Ship Register
+Shipping Lane
+Parking Garage
+Sport Utility Vehicle
+Relational Attribute
+International Airport
+Organic Object
+Truck Trailer
+Legal Charge
+Electronic Device
+Liner Service
+Fuel Tank
+Fire Boat
+Trade Embargo
+Offshore Anchorage
+Surfaced Roadway
+Internal Attribute
+Diesel Engine
+Transportation Company
+Offshore Supply Ship
+Passenger Railway Car

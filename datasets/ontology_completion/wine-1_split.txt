@@ -1,0 +1,76 @@
+Port
+Red Bordeaux
+Full Bodied Wine
+Italian Wine
+Late Harvest
+Wine Descriptor
+Pasta
+Edible Thing
+Sweet Wine
+Meritage
+Red Burgundy
+White Burgundy
+Potable Liquid
+Wine Flavor
+St Emilion
+Sweet Fruit
+Muscadet
+American Wine
+White Bordeaux
+French Wine
+Meursault
+Meal Course
+Red Table Wine
+Ice Wine
+California Wine
+Sancerre
+Alsatian Wine
+Meal
+German Wine
+Anjou
+Sweet Dessert
+Consumable Thing
+Dessert
+Sweet Riesling
+Gamay
+Fish Course
+Loire
+Riesling
+Wine Color
+Dry Red Wine
+Bordeaux
+Margaux
+Chenin Blanc
+Dry Riesling
+Fruit Course
+Dry White Wine
+Cabernet Sauvignon
+Burgundy
+Texas Wine
+White Wine
+Merlot
+Rose Wine
+Medoc
+Beaujolais
+White Table Wine
+Cabernet Franc
+Red Meat
+Pauillac
+Sauterne
+Wine Taste
+Pinot Noir
+Red Wine
+Chianti
+Tours
+Chardonnay
+Zinfandel
+Dessert Wine
+Table Wine
+Semillon
+Wine Grape
+Petite Syrah
+Dry Wine
+Fowl
+Dessert Course
+Pinot Blanc
+Sauvignon Blanc

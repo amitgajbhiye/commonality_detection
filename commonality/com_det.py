@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
 def read_data(file_path):
     with open(file_path, "r") as in_file:
         lines = in_file.read().splitlines()
+        lines = [line.strip() for line in lines if line != ""]
 
     return lines
 
@@ -261,7 +262,7 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
         writer = csv.writer(out_file, delimiter="\t")
         writer.writerows(all_con_similar_data)
 
-    clustered_fname = f"{os.path.splitext(out_fname)[0]}_clustered.txt"
+    clustered_fname = f"{os.path.splitext(out_fname)[0]}_concept2counts.tsv"
 
     create_clusters(
         concept_similar_list=all_con_similar_data, output_file_name=clustered_fname
@@ -269,45 +270,90 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
 
 
 if __name__ == "__main__":
-    concept_1_file = "datasets/ufet_clean_types.txt"
-    concept_1_list = read_data(file_path=concept_1_file)
-    print(f"Num concepts : {len(concept_1_list)}", flush=True)
+    ############# For UFET Experiments #############
 
-    # Fasttext Embeddings
-    # embedding_file = (
-    #     "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec"
-    # )
+    # concept_1_file = "datasets/ufet_clean_types.txt"
+    # concept_1_list = read_data(file_path=concept_1_file)
+    # print(f"Num concepts : {len(concept_1_list)}", flush=True)
 
-    # conceptnet numberbatch embeddings
-    # embedding_file = (
-    #     "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt"
-    # )
+    # similarity_thresh = 0.50
 
-    # embedding_file = "word2vec-google-news-300"
+    # embedding_files = [
+    #     "word2vec-google-news-300",
+    #     "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
+    #     "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
+    # ]
+    # out_fnames = [
+    #     f"output_files/word2vec_ueft_label_similar_{similarity_thresh}thresh.txt",
+    #     f"output_files/numberbatch_ueft_label_similar_{similarity_thresh}thresh.txt",
+    #     f"output_files/fasttext_ueft_label_similar_{similarity_thresh}thresh.txt",
+    # ]
 
-    similarity_thresh = 0.50
+    # for emb_file, out_file in zip(embedding_files, out_fnames):
+    #     print("*" * 60, flush=True)
+    #     print("new_run", flush=True)
+    #     print(f"embedding_file : {emb_file}", flush=True)
+    #     print(f"output_file :{out_file}", flush=True)
+    #     print("*" * 60)
 
-    embedding_files = [
-        "word2vec-google-news-300",
-        "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
-        "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
+    #     get_similar_words(
+    #         concept_1_list=concept_1_list,
+    #         sim_thresh=similarity_thresh,
+    #         embedding_model=emb_file,
+    #         out_fname=out_file,
+    #     )
+
+    ############# For Classification Vocab Experiments #############
+
+    concept1_file_list = [
+        (
+            "datasets/classification_vocabs/BabelnetDomain.txt",
+            "output_files/classificatin_vocabs/bablenet_domain",
+        ),
+        (
+            "datasets/classification_vocabs/WordNet.txt",
+            "output_files/classificatin_vocabs/wordnet",
+        ),
+        (
+            "datasets/classification_vocabs/X-McRae.txt",
+            "output_files/classificatin_vocabs/xmcrae",
+        ),
     ]
-    out_fnames = [
-        f"output_files/word2vec_ueft_label_similar_{similarity_thresh}thresh.txt",
-        f"output_files/numberbatch_ueft_label_similar_{similarity_thresh}thresh.txt",
-        f"output_files/fasttext_ueft_label_similar_{similarity_thresh}thresh.txt",
-    ]
 
-    for emb_file, out_file in zip(embedding_files, out_fnames):
-        print("*" * 60, flush=True)
-        print("new_run", flush=True)
-        print(f"embedding_file : {emb_file}", flush=True)
-        print(f"output_file :{out_file}", flush=True)
-        print("*" * 60)
+    for concept_1_file, output_dir in concept1_file_list:
+        concept_1_list = read_data(file_path=concept_1_file)
+        print(f"concept_1_file : {concept_1_file}", flush=True)
+        print(f"Num concepts : {len(concept_1_list)}", flush=True)
+        print(f"concept_1_list : {concept_1_list}", flush=True)
 
-        get_similar_words(
-            concept_1_list=concept_1_list,
-            sim_thresh=similarity_thresh,
-            embedding_model=emb_file,
-            out_fname=out_file,
-        )
+        similarity_thresh = 0.50
+
+        embedding_files = [
+            "word2vec-google-news-300",
+            "/scratch/c.scmag3/static_embeddings/numberbatch/numberbatch-en-19.08.txt",
+            "/scratch/c.scmag3/static_embeddings/fasttext/crawl-300d-2M-subword.vec",
+        ]
+        out_fnames = [
+            os.path.join(output_dir, f"word2vec_similarthresh{similarity_thresh}.tsv"),
+            os.path.join(
+                output_dir, f"numberbatch_similarthresh{similarity_thresh}.tsv"
+            ),
+            os.path.join(output_dir, f"fasttext_similarthresh{similarity_thresh}.tsv"),
+        ]
+
+        for emb_file, out_file in zip(embedding_files, out_fnames):
+            print("*" * 60, flush=True)
+            print("new_run", flush=True)
+            print("*" * 60)
+
+            print(f"concept_1_list : {concept_1_file}", flush=True)
+            print(f"output_dir : {output_dir}", flush=True)
+            print(f"embedding_file : {emb_file}", flush=True)
+            print(f"output_file :{out_file}", flush=True, end="\n")
+
+            get_similar_words(
+                concept_1_list=concept_1_list,
+                sim_thresh=similarity_thresh,
+                embedding_model=emb_file,
+                out_fname=out_file,
+            )
