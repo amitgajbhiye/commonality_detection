@@ -1,15 +1,15 @@
 #!/bin/bash --login
 
-#SBATCH --job-name=getClusters
+#SBATCH --job-name=getClaSimWords
 
-#SBATCH --output=logs/out_get_clusters_w2v_numberbatch_fasttext.txt
-#SBATCH --error=logs/err_get_clusters_w2v_numberbatch_fasttext.txt
+#SBATCH --output=logs/classificatin_vocabs/out_get_classification_vocabs_similar_words.txt
+#SBATCH --error=logs/classificatin_vocabs/err_get_classification_vocabs_similar_words.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
 #SBATCH -A scw1858
 
-#SBATCH -p highmem
+#SBATCH -p compute
 #SBATCH --mem=40G
 
 #SBATCH -t 3-00:00:00
