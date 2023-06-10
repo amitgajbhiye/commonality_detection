@@ -270,8 +270,6 @@ def get_similar_words(concept_1_list, sim_thresh, out_fname, embedding_model):
 
 
 if __name__ == "__main__":
-    exp_name = str(sys.argv[1])  # classi_vocab, ontology_comp
-
     ############# For UFET Experiments #############
 
     # concept_1_file = "datasets/ufet_clean_types.txt"
@@ -306,21 +304,27 @@ if __name__ == "__main__":
     #     )
 
     ############# For Classification Vocab Experiments #############
+    exp_name = str(sys.argv[1])  # classi_vocab, ontology_comp
+    dataset = str(sys.argv[2])  # babelnet, wordnet, xmcrae
+
     if exp_name == "classi_vocab":
-        concept1_file_list = [
-            (
-                "datasets/classification_ vocabs/BabelnetDomain.txt",
+        if dataset == "babelnet":
+            concept1_file_list = [
+                "datasets/classification_vocabs/BabelnetDomain.txt",
                 "output_files/classification_vocabs/bablenet_domain",
-            ),
-            (
-                "datasets/classification_ vocabs/WordNet.txt",
+            ]
+        elif dataset == "wordnet":
+            concept1_file_list = [
+                "datasets/classification_vocabs/WordNet.txt",
                 "output_files/classification_vocabs/wordnet",
-            ),
-            (
-                "datasets/classification_ vocabs/X-McRae.txt",
+            ]
+        elif dataset == "xmcrae":
+            concept1_file_list = [
+                "datasets/classification_vocabs/X-McRae.txt",
                 "output_files/classification_vocabs/xmcrae",
-            ),
-        ]
+            ]
+        else:
+            raise Exception(f"Specify dataset from: babelnet, wordnet, xmcrae")
 
         for concept_1_file, output_dir in concept1_file_list:
             concept_1_list = read_data(file_path=concept_1_file)
