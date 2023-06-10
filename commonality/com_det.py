@@ -375,12 +375,13 @@ if __name__ == "__main__":
                 )
     elif exp_name == "ontology_comp":
         if dataset == "sumo":
-            concept1_file_list = [(
-                "datasets/ontology_completion/sumo-1_split.txt",
-                "output_files/ontology_completion/sumo"
-            )]
+            concept1_file_list = [
+                (
+                    "datasets/ontology_completion/sumo-1_split.txt",
+                    "output_files/ontology_completion/sumo",
+                )
+            ]
         elif dataset == "all_except_sumo":
-
             concept1_file_list = [
                 (
                     "datasets/ontology_completion/economy-1_split.txt",
@@ -390,7 +391,6 @@ if __name__ == "__main__":
                     "datasets/ontology_completion/olympics-1_split.txt",
                     "output_files/ontology_completion/olympics",
                 ),
-                ,
                 (
                     "datasets/ontology_completion/transport-1_split.txt",
                     "output_files/ontology_completion/transport",
@@ -398,7 +398,7 @@ if __name__ == "__main__":
                 (
                     "datasets/ontology_completion/wine-1_split.txt",
                     "output_files/ontology_completion/wine",
-                )
+                ),
             ]
         else:
             raise Exception(f"Specify dataset from: sumo, all_except_sumo")
