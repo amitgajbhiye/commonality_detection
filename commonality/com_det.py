@@ -305,7 +305,7 @@ if __name__ == "__main__":
 
     ############# For Classification Vocab Experiments #############
     exp_name = str(sys.argv[1])  # classi_vocab, ontology_comp
-    dataset = str(sys.argv[2])  # babelnet, wordnet, xmcrae
+    dataset = str(sys.argv[2])  # babelnet, wordnet, xmcrae, sumo, all_except_sumo
 
     if exp_name == "classi_vocab":
         if dataset == "babelnet":
@@ -374,29 +374,34 @@ if __name__ == "__main__":
                     out_fname=out_file,
                 )
     elif exp_name == "ontology_comp":
-        #### This portion is not complete yet
-        concept1_file_list = [
-            (
-                "datasets/ontology_completion/economy-1_split.txt",
-                "output_files/ontology_completion/economy",
-            ),
-            (
-                "datasets/ontology_completion/olympics-1_split.txt",
-                "output_files/ontology_completion/olympics",
-            ),
-            (
+        if dataset == "sumo":
+            concept1_file_list = [(
                 "datasets/ontology_completion/sumo-1_split.txt",
-                "output_files/ontology_completion/sumo",
-            ),
-            (
-                "datasets/ontology_completion/transport-1_split.txt",
-                "output_files/ontology_completion/transport",
-            ),
-            (
-                "datasets/ontology_completion/wine-1_split.txt",
-                "output_files/ontology_completion/wine",
-            ),
-        ]
+                "output_files/ontology_completion/sumo"
+            )]
+        elif dataset == "all_except_sumo":
+
+            concept1_file_list = [
+                (
+                    "datasets/ontology_completion/economy-1_split.txt",
+                    "output_files/ontology_completion/economy",
+                ),
+                (
+                    "datasets/ontology_completion/olympics-1_split.txt",
+                    "output_files/ontology_completion/olympics",
+                ),
+                ,
+                (
+                    "datasets/ontology_completion/transport-1_split.txt",
+                    "output_files/ontology_completion/transport",
+                ),
+                (
+                    "datasets/ontology_completion/wine-1_split.txt",
+                    "output_files/ontology_completion/wine",
+                )
+            ]
+        else:
+            raise Exception(f"Specify dataset from: sumo, all_except_sumo")
 
         for concept_1_file, output_dir in concept1_file_list:
             concept_1_list = read_data(file_path=concept_1_file)
