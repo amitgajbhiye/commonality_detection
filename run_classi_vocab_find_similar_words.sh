@@ -14,7 +14,7 @@
 #SBATCH --qos=gpu7d
 
 #SBATCH -t 7-00:00:00
-#SBATCH --mem=60G
+#SBATCH --mem=50G
 
 conda activate venv
 
