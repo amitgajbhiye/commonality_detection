@@ -176,8 +176,8 @@ def get_similar_words(
 
     df = df.sort_values(by=["concept_2"], inplace=False)
 
-    # df["concept_1"] = df["concept_1"].apply(clean_text)
-    # df["concept_2"] = df["concept_2"].apply(clean_text)
+    df["concept_1"] = df["concept_1"].apply(clean_text)
+    df["concept_2"] = df["concept_2"].apply(clean_text)
 
     df.to_csv(out_fname, header=True, index=False, sep="\t")
 
