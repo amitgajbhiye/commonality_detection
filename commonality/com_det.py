@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
 
 
 def clean_text(word):
-    t = word.strip().replace("_", " ").split()
+    t = word.strip().replace("_", " ").split().lower()
 
     return " ".join(t)
 
