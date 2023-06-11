@@ -82,7 +82,7 @@ def get_similar_words(
                 multiword_mean_vec, topn=top_k_similar_concepts
             )
             multiword_con_and_similar_words = [
-                (multiword, sim_word, sim_score)
+                (" ".join(multiword), sim_word, sim_score)
                 for sim_word, sim_score in multiword_similar_words_and_scores
             ]
             print(
