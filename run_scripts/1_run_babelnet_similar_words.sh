@@ -17,6 +17,6 @@
 
 conda activate venv
 
-python3 commonality/com_det_topk_similar.py classi_vocab babelnet
+python3 commonality/com_det.py classi_vocab babelnet
 
 echo 'Job Finished !!!'

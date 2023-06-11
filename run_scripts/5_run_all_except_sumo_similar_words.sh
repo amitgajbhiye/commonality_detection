@@ -15,6 +15,6 @@
 
 conda activate venv
 
-python3 commonality/com_det_topk_similar.py ontology_comp all_except_sumo
+python3 commonality/com_det.py ontology_comp all_except_sumo
 
 echo 'Job Finished !!!'

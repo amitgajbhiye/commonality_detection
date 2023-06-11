@@ -15,6 +15,6 @@
 
 conda activate venv
 
-python3 commonality/com_det_topk_similar.py classi_vocab xmcrae
+python3 commonality/com_det.py classi_vocab xmcrae
 
 echo 'Job Finished !!!'
