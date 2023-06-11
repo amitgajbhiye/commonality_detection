@@ -1,13 +1,11 @@
-import csv
 import os
-import pickle
 import sys
 from pathlib import Path
 
+import gensim.downloader as api
 import numpy as np
 import pandas as pd
 from gensim.models import KeyedVectors
-import gensim.downloader as api
 
 sys.path.insert(0, os.getcwd())
 sys.path.insert(0, str(Path(os.getcwd()).parent.absolute()))
@@ -25,29 +23,6 @@ def read_data(file_path):
         lines = [clean_text(line) for line in lines if line != ""]
 
     return lines
-
-
-def create_clusters(concept_similar_list, output_file_name):
-    print(f"Clustering data ....", flush=True)
-    df = pd.DataFrame(
-        concept_similar_list, columns=["concept_1", "concept_2", "sim_score"]
-    )
-
-    print(f"input_shape: {df.shape}", flush=True)
-
-    con12_df = df[["concept_1", "concept_2"]]
-    df["concept_2_counts"] = con12_df.groupby(by=["concept_2"]).transform("count")
-
-    print(f"df_shape: {df.shape}", flush=True)
-
-    df = df.sort_values(by=["concept_2"], inplace=False)
-
-    print(f"clustered_data_shape: {df.shape}", flush=True)
-
-    df["concept_1"] = df["concept_1"].apply(clean_text)
-    df["concept_2"] = df["concept_2"].apply(clean_text)
-
-    df.to_csv(output_file_name, header=True, index=False, sep="\t")
 
 
 def get_similar_words(
@@ -76,6 +51,7 @@ def get_similar_words(
         con=None, multiword=None, top_k_similar_concepts=top_k_similar_concepts
     ):
         if con:
+            print(flush=True)
             print(f"concept_in_vocab : {con}", flush=True)
             assert multiword is None, "multiword not None"
             similar_words_and_scores = vector_model.most_similar(
@@ -94,6 +70,7 @@ def get_similar_words(
 
         elif multiword:
             assert con is None, "con not None"
+            print(flush=True)
             print(f"multiword_concept_in_vocab : {multiword}", flush=True)
 
             multiword_mean_vec = np.mean(
@@ -157,6 +134,7 @@ def get_similar_words(
             multi_word = [word for word in con_split if word in vocab]
 
             if " ".join(multi_word) == con:
+                print(flush=True)
                 print(f"multiword_concept_found : {con}", flush=True)
 
                 get_top_k_similar_word(con=None, multiword=multi_word)
@@ -167,15 +145,15 @@ def get_similar_words(
             else:
                 c_word_not_found += 1
                 word_not_found.append(con)
-                print(f"single_concept_not_in_vocab : {con}", flush=True)
                 print(flush=True)
+                print(f"multiword_concept_not_in_vocab : {con}", flush=True)
 
         else:
             c_word_not_found += 1
             word_not_found.append(con)
 
-            print(f"single_concept_not_in_vocab : {con}", flush=True)
             print(flush=True)
+            print(f"concept_not_in_vocab : {con}", flush=True)
 
     print(f"individual_c_word : {c_word}", flush=True)
     print(flush=True)
