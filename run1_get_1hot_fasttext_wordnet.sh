@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=RP_WN_1Hot
 
-#SBATCH --output=logs/classification_vocabs/out_get_one_hot_enc_wordnet_clusters.txt
-#SBATCH --error=logs/classification_vocab/err_get_one_hot_enc_wordnet_clusters.txt
+#SBATCH --output=logs/classification_vocabs/out_get_one_hot_enc_fasttext_wordnet_clusters.txt
+#SBATCH --error=logs/classification_vocabs/err_get_one_hot_enc_fasttext_wordnet_clusters.txt
 
 #SBATCH --tasks-per-node=5
 #SBATCH --ntasks=5
