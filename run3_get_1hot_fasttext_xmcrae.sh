@@ -1,6 +1,6 @@
 #!/bin/bash --login
 
-#SBATCH --job-name=XM_BN_1Hot
+#SBATCH --job-name=RP_XM_1Hot
 
 #SBATCH --output=logs/classification_vocabs/out_get_one_hot_enc_fasttext_xmcrae_clusters.txt
 #SBATCH --error=logs/classification_vocabs/err_get_one_hot_enc_fasttext_xmcrae_clusters.txt
