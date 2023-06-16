@@ -54,6 +54,8 @@ if __name__ == "__main__":
     inp_dir_path = str(sys.argv[1])
     out_dir_path = str(sys.argv[2])
 
+    print(f"sys.argv : {sys.argv}")
+
     print(flush=True)
     print(f"input_arguments", flush=True)
     print(f"inp_dir_path", flush=True)
