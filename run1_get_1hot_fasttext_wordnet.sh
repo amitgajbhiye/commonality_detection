@@ -16,6 +16,6 @@
 
 conda activate venv
 
-python3 commonality/one_hot_converter.py  output_files/classification_vocabs_similar_thresh_50/wordnet  output_files/classification_vocabs_similar_thresh_50/wordnet/onehot_encodings
+python3 commonality/one_hot_converter.py output_files/classification_vocabs_similar_thresh_50/wordnet output_files/classification_vocabs_similar_thresh_50/wordnet/onehot_encodings
 
 echo 'Job Finished !!!'
