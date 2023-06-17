@@ -51,13 +51,43 @@ def one_hot_encoder(inp_dir_path, out_dir_path):
 
 
 if __name__ == "__main__":
-    inp_dir_path = str(sys.argv[1])
-    out_dir_path = str(sys.argv[2])
+    task_name = "ontology_completion"  # classification_vocabs
 
-    print(flush=True)
-    print(f"sys.argv : {sys.argv}", flush=True)
-    print(f"inp_dir_path : {inp_dir_path}", flush=True)
-    print(f"out_dir_path: {out_dir_path}", flush=True)
-    print(flush=True)
+    print(f"task_name : {task_name}", flush=True)
 
-    one_hot_encoder(inp_dir_path=inp_dir_path, out_dir_path=out_dir_path)
+    if task_name == "ontology_completion":
+        inp_dirs = [
+            "output_files/ontology_completion_similar_thresh_50/sumo",
+            "output_files/ontology_completion_similar_thresh_50/economy",
+            "output_files/ontology_completion_similar_thresh_50/olympics",
+            "output_files/ontology_completion_similar_thresh_50/transport",
+            "output_files/ontology_completion_similar_thresh_50/wine",
+        ]
+
+        out_dirs = [
+            "output_files/ontology_completion_similar_thresh_50/sumo/onehot_encodings",
+            "output_files/ontology_completion_similar_thresh_50/economy/onehot_encodings",
+            "output_files/ontology_completion_similar_thresh_50/olympics/onehot_encodings",
+            "output_files/ontology_completion_similar_thresh_50/transport/onehot_encodings",
+            "output_files/ontology_completion_similar_thresh_50/wine/onehot_encodings",
+        ]
+
+        for inp_dir_path, out_dir_path in zip(inp_dirs, out_dirs):
+            print(f"ontology_completion", flush=True)
+            print(f"inp_dir_path : {inp_dir_path}", flush=True)
+            print(f"out_dir_path: {out_dir_path}", flush=True)
+            print(flush=True)
+
+            one_hot_encoder(inp_dir_path=inp_dir_path, out_dir_path=out_dir_path)
+
+    else:
+        inp_dir_path = str(sys.argv[1])
+        out_dir_path = str(sys.argv[2])
+
+        print(flush=True)
+        print(f"sys.argv : {sys.argv}", flush=True)
+        print(f"inp_dir_path : {inp_dir_path}", flush=True)
+        print(f"out_dir_path: {out_dir_path}", flush=True)
+        print(flush=True)
+
+        one_hot_encoder(inp_dir_path=inp_dir_path, out_dir_path=out_dir_path)
