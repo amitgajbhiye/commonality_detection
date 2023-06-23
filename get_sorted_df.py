@@ -11,7 +11,7 @@ df = pd.read_csv(
 print(df, flush=True)
 
 all_df = []
-for c in df.con.values[0:200]:
+for c in df.con.values[0:1000]:
     con_df = df[df["con"] == c]
     con_df = con_df.sort_values("thresh", ascending=False)
 
@@ -23,5 +23,5 @@ for c in df.con.values[0:200]:
 
 final_df = pd.concat(all_df)
 
-sorted_out_file = "output_files/clustered_relbert_scored_file/con200_grouped_thresh_sored_numberbatch_relation_probs.txt"
+sorted_out_file = "output_files/clustered_relbert_scored_file/con1000_grouped_thresh_sored_numberbatch_relation_probs.txt"
 final_df.to_csv(sorted_out_file, sep="\t", index=False)
