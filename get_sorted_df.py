@@ -14,7 +14,7 @@ all_df = []
 
 print(f"concepts : {df.con.values[0:1000]}", flush=True)
 
-for c in df.con.values[0:3000]:
+for c in df.con.sample(n=3000, replace=False):
     con_df = df[df["con"] == c]
     con_df = con_df.sort_values("thresh", ascending=False)
 
