@@ -14,7 +14,10 @@ all_df = []
 for c in df.con:
     con_df = df[df["con"] == c]
     con_df = con_df.sort_values("thresh", ascending=False)
-    print(con_df.head(n=20), flush=True)
+
+    print(flush=True)
+    print(con_df, flush=True)
+
     all_df.append(con_df)
 
 
